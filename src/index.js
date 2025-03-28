@@ -1,4 +1,6 @@
-require('dotenv').config();
+// require('dotenv').config();
+require('dotenv').config({ path: './.env' });
+
 const initMongoConnection = require('./db/initMongoConnection');
 const setupServer = require('./server');
 
@@ -13,13 +15,9 @@ const startApp = async () => {
 
 startApp();
 
-require('dotenv').config();
-
-console.log('ENV VARIABLES LOADED:');
+console.log('Checking environment variables...');
 console.log('MONGODB_URL:', process.env.MONGODB_URL);
 console.log('MONGODB_USER:', process.env.MONGODB_USER);
 console.log('MONGODB_PASSWORD:', process.env.MONGODB_PASSWORD);
 console.log('MONGODB_DB:', process.env.MONGODB_DB);
 console.log('PORT:', process.env.PORT);
-
-// Якщо якась змінна undefined — Render їх не передає.
