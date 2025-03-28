@@ -1,6 +1,5 @@
 // require('dotenv').config();
-require('dotenv').config({ path: './.env' });
-
+require('dotenv').config();
 const initMongoConnection = require('./db/initMongoConnection');
 const setupServer = require('./server');
 
@@ -15,9 +14,12 @@ const startApp = async () => {
 
 startApp();
 
-console.log('Checking environment variables...');
-console.log('MONGODB_URL:', process.env.MONGODB_URL);
-console.log('MONGODB_USER:', process.env.MONGODB_USER);
-console.log('MONGODB_PASSWORD:', process.env.MONGODB_PASSWORD);
-console.log('MONGODB_DB:', process.env.MONGODB_DB);
-console.log('PORT:', process.env.PORT);
+// console.log('Checking environment variables...');
+// console.log('MONGODB_URL:', process.env.MONGODB_URL);
+// console.log('MONGODB_USER:', process.env.MONGODB_USER);
+// console.log('MONGODB_PASSWORD:', process.env.MONGODB_PASSWORD);
+// console.log('MONGODB_DB:', process.env.MONGODB_DB);
+// console.log('PORT:', process.env.PORT);
+
+console.log('Завантаження змінних середовища...');
+console.log('process.env:', process.env);
