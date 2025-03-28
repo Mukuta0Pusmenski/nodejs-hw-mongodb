@@ -24,7 +24,7 @@ startApp();
 // console.log('Завантаження змінних середовища...');
 // console.log('process.env:', process.env);
 
-// console.log('process.env:', process.env);
+
 
 console.log('process.env:', process.env);
 console.log('MONGODB_URL:', process.env.MONGODB_URL);
