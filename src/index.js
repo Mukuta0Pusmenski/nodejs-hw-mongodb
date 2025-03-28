@@ -21,5 +21,8 @@ startApp();
 // console.log('MONGODB_DB:', process.env.MONGODB_DB);
 // console.log('PORT:', process.env.PORT);
 
-console.log('Завантаження змінних середовища...');
+// console.log('Завантаження змінних середовища...');
+// console.log('process.env:', process.env);
+
 console.log('process.env:', process.env);
+
