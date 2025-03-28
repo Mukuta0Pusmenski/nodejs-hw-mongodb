@@ -1,32 +1,26 @@
 const express = require('express');
 const contactsController = require('./controllers/contactsController');
-const initMongoConnection = require('./db/initMongoConnection');
 
-const setupServer = async () => {
-  // Ініціалізуємо підключення до MongoDB
-  await initMongoConnection();
+const setupServer = () => {
+  const app = express();
 
- const app = express();
+  // Middleware for working with JSON
+  app.use(express.json());
 
-// Middleware для роботи з JSON
-app.use(express.json());
+  // Register routes
+  app.get('/contacts', contactsController.getAllContacts);
+  app.get('/contacts/:contactId', contactsController.getContactById);
 
-// Реєстрація маршрутів
-app.get('/contacts', contactsController.getAllContacts);
-app.get('/contacts/:contactId', contactsController.getContactById);
+  // Handle non-existing routes
+  app.use((req, res) => {
+    res.status(404).json({ message: 'Not found' });
+  });
 
-// Обробка неіснуючих маршрутів
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' });
-});
+  const PORT = process.env.PORT || 3000;
 
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 };
 
 module.exports = setupServer;

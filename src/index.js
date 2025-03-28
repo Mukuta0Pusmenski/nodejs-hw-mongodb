@@ -1,15 +1,14 @@
-// const setupServer = require('./server');
-// const initMongoConnection = require('./db/initMongoConnection');
-
 require('dotenv').config();
 const initMongoConnection = require('./db/initMongoConnection');
 const setupServer = require('./server');
 
-
-
 const startApp = async () => {
-  await initMongoConnection();
-  setupServer();
+  try {
+    await initMongoConnection();
+    setupServer();
+  } catch (error) {
+    console.error('Error starting the app:', error.message);
+  }
 };
 
 startApp();
