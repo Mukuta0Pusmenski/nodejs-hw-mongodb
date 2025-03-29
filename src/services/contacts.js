@@ -22,4 +22,4 @@ const getById = async (id) => {
 module.exports = {
   getAll,
   getById,
-};
+}; // Експорт функцій сервісу

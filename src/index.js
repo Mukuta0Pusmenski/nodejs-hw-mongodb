@@ -3,6 +3,9 @@ require('dotenv').config();
 const initMongoConnection = require('./db/initMongoConnection');
 const setupServer = require('./server');
 
+setupServer();
+;
+
 const startApp = async () => {
   try {
     await initMongoConnection();
