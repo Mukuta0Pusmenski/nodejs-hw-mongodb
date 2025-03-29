@@ -1,35 +1,15 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const contactSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true, // Ім'я контакту є обов'язковим
-    },
-    phoneNumber: {
-      type: String,
-      required: true, // Номер телефону обов'язковий
-    },
-    email: {
-      type: String, // Електронна пошта, необов'язкова
-      default: null,
-    },
-    isFavourite: {
-      type: Boolean, // Чи є контакт улюбленим
-      default: false,
-    },
-    contactType: {
-      type: String, // Тип контакту: 'work', 'home', 'personal'
-      enum: ['work', 'home', 'personal'], // Обмеження на типи
-      required: true,
-      default: 'personal', // За замовчуванням 'personal'
-    },
-  },
-  {
-    timestamps: true, // Автоматично додає поля createdAt та updatedAt
-  }
-);
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  email: { type: String, default: null },
+  isFavourite: { type: Boolean, default: false },
+  contactType: { type: String, enum: ['personal', 'home'], required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+});
 
 const Contact = mongoose.model('Contact', contactSchema);
 
-module.exports = Contact;
+export default Contact;

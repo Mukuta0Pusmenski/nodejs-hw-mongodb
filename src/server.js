@@ -1,5 +1,5 @@
-const express = require('express');
-const contactsController = require('./controllers/contactsController');
+import express from 'express';
+import { getAllContacts, getContactById } from './controllers/contactsController.js';
 
 const setupServer = () => {
   const app = express();
@@ -8,8 +8,8 @@ const setupServer = () => {
   app.use(express.json());
 
   // Register routes
-  app.get('/contacts', contactsController.getAllContacts);
-  app.get('/contacts/:contactId', contactsController.getContactById);
+  app.get('/contacts', getAllContacts);
+  app.get('/contacts/:contactId', getContactById);
 
   // Handle non-existing routes
   app.use((req, res) => {
@@ -23,7 +23,4 @@ const setupServer = () => {
   });
 };
 
-module.exports = setupServer;
-
-
-//test=fo=exeple=2
+setupServer();
