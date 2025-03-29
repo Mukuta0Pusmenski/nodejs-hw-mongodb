@@ -1,38 +1,25 @@
-// require('dotenv').config();
-require('dotenv').config();
-const initMongoConnection = require('./db/initMongoConnection');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const setupServer = require('./server');
+const getEnvVar = require('./utils/getEnvVar');
 
-setupServer();
-;
+dotenv.config();
 
-const startApp = async () => {
-  try {
-    await initMongoConnection();
+const MONGODB_URL = getEnvVar('MONGODB_URL');
+const MONGODB_USER = getEnvVar('MONGODB_USER');
+const MONGODB_PASSWORD = getEnvVar('MONGODB_PASSWORD');
+const MONGODB_DB = getEnvVar('MONGODB_DB');
+
+mongoose
+  .connect(MONGODB_URL, {
+    user: MONGODB_USER,
+    pass: MONGODB_PASSWORD,
+    dbName: MONGODB_DB,
+  })
+  .then(() => {
+    console.log('Mongo connection successfully established!');
     setupServer();
-  } catch (error) {
-    console.error('Error starting the app:', error.message);
-  }
-};
-
-startApp();
-
-// console.log('Checking environment variables...');
-// console.log('MONGODB_URL:', process.env.MONGODB_URL);
-// console.log('MONGODB_USER:', process.env.MONGODB_USER);
-// console.log('MONGODB_PASSWORD:', process.env.MONGODB_PASSWORD);
-// console.log('MONGODB_DB:', process.env.MONGODB_DB);
-// console.log('PORT:', process.env.PORT);
-
-// console.log('Завантаження змінних середовища...');
-// console.log('process.env:', process.env);
-
-
-
-// console.log('process.env:', process.env);
-// console.log('MONGODB_URL:', process.env.MONGODB_URL);
-// console.log('MONGODB_USER:', process.env.MONGODB_USER);
-// console.log('MONGODB_PASSWORD:', process.env.MONGODB_PASSWORD);
-// console.log('MONGODB_DB:', process.env.MONGODB_DB);
-// console.log('PORT:', process.env.PORT);
-
+  })
+  .catch((error) => {
+    console.error('Mongo connection error:', error.message);
+  });
