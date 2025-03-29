@@ -1,6 +1,6 @@
-import Contact from '../models/contactModel.js';
+const Contact = require('../models/contactModel');
 
-export const getAll = async () => {
+const getAll = async () => {
   try {
     const contacts = await Contact.find();
     console.log('Contacts retrieved:', contacts);
@@ -10,11 +10,16 @@ export const getAll = async () => {
   }
 };
 
-export const getById = async (id) => {
+const getById = async (id) => {
   try {
     const contact = await Contact.findById(id);
     return contact;
   } catch (error) {
     throw new Error('Unable to retrieve contact: ' + error.message);
   }
+};
+
+module.exports = {
+  getAll,
+  getById,
 };

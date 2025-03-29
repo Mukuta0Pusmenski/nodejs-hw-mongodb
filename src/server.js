@@ -1,22 +1,23 @@
-import express from 'express';
-import { getAllContacts, getContactById } from './controllers/contactsController.js';
+const express = require('express');
+const { getAllContacts, getContactById } = require('./controllers/contactsController');
+const getEnvVar = require('./utils/getEnvVar');
 
 const setupServer = () => {
   const app = express();
 
-  // Middleware for working with JSON
+  // Middleware для роботи з JSON
   app.use(express.json());
 
-  // Register routes
+  // Реєстрація маршрутів
   app.get('/contacts', getAllContacts);
   app.get('/contacts/:contactId', getContactById);
 
-  // Handle non-existing routes
+  // Обробка неіснуючих маршрутів
   app.use((req, res) => {
     res.status(404).json({ message: 'Not found' });
   });
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = getEnvVar('PORT');
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

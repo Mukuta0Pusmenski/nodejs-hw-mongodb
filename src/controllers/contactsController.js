@@ -1,7 +1,7 @@
-import getEnvVar from '../utils/getEnvVar.js';
-import contactsService from '../services/contacts.js';
+const contactsService = require('../services/contacts');
+const getEnvVar = require('../utils/getEnvVar');
 
-export const getAllContacts = async (req, res) => {
+const getAllContacts = async (req, res) => {
   console.log('Запит на /contacts отримано');
   try {
     const contacts = await contactsService.getAll();
@@ -19,7 +19,7 @@ export const getAllContacts = async (req, res) => {
   }
 };
 
-export const getContactById = async (req, res) => {
+const getContactById = async (req, res) => {
   console.log(`Запит на /contacts/${req.params.contactId} отримано`);
   try {
     const { contactId } = req.params;
@@ -42,4 +42,9 @@ export const getContactById = async (req, res) => {
       message: 'Internal Server Error',
     });
   }
+};
+
+module.exports = {
+  getAllContacts,
+  getContactById,
 };
