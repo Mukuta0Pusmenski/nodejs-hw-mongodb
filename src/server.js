@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllContacts, getContactById } = require('./controllers/contactsController');
-const getEnvVar = require('./utils/getEnvVar'); // Утиліта для змінних середовища
+const getEnvVar = require('./utils/getEnvVar');
 
 const setupServer = () => {
   const app = express();
@@ -17,16 +17,12 @@ const setupServer = () => {
     res.status(404).json({ message: 'Not found' });
   });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
+  // Використай порт, призначений Render
+  const PORT = getEnvVar('PORT') || 3000;
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 };
 
-module.exports = setupServer; // Експорт функції setupServer
+module.exports = setupServer;
