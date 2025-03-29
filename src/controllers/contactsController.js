@@ -1,5 +1,5 @@
 const contactsService = require('../services/contacts');
-const getEnvVar = require('../utils/getEnvVar');
+const getEnvVar = require('../utils/getEnvVar.js');
 
 const getAllContacts = async (req, res) => {
   console.log('Запит на /contacts отримано');
