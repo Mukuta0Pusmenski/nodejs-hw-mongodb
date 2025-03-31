@@ -6,4 +6,4 @@ const getEnvVar = (key) => {
   return value;
 };
 
-module.exports = getEnvVar; // Експорт функції для використання змінних середовища
+export default getEnvVar;

@@ -1,5 +1,5 @@
-const express = require('express');
-const { getAllContacts, getContactById } = require('./controllers/contactsController');
+import express from 'express';
+import { getAllContacts, getContactById } from './controllers/contactsController.js';
 
 const setupServer = () => {
   const app = express();
@@ -18,4 +18,4 @@ const setupServer = () => {
   });
 };
 
-module.exports = setupServer;
+export default setupServer;
