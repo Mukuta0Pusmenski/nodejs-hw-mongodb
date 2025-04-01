@@ -34,3 +34,5 @@ await initMongoConnection();
 setupServer();
 
 // test=push-nosing-ok?
+
+console.log('Server started successfully!');
