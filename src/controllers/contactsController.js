@@ -144,7 +144,7 @@
 //   ctrlWrapper(deleteContactById) as deleteContactById,
 // };
 
-iimport { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
+import { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 
 // Обгортаємо функції без повторного оголошення імені
