@@ -53,5 +53,19 @@ const getById = async (id) => {
   }
 };
 
+const contacts = []; // Простий масив для демонстрації. Замініть на базу даних.
+
+const addContact = async (contactData) => {
+  const newContact = {
+    id: contacts.length + 1, // Автоматичне генерування ID
+    ...contactData,
+  };
+  contacts.push(newContact); // Додаємо до списку
+  return newContact;
+};
+
+export { addContact };
+
+
 // Експорт функцій
 export { getAll, getById };

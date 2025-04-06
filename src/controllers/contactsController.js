@@ -34,38 +34,112 @@
 
 // export { getAllContacts, getContactById };
 
-import { getAll, getById } from '../services/contacts.js';
+// import { getAll, getById } from '../services/contacts.js';
+
+// const getAllContacts = async (req, res) => {
+//   try {
+//     const contacts = await getAll();
+//     res.status(200).json({
+//       status: 200,
+//       message: 'Successfully found contacts!',
+//       data: contacts,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// };
+
+// const getContactById = async (req, res) => {
+//   try {
+//     const { contactId } = req.params;
+//     const contact = await getById(contactId);
+
+//     if (!contact) {
+//       return res.status(404).json({ message: 'Contact not found' });
+//     }
+
+//     res.status(200).json({
+//       status: 200,
+//       message: `Successfully found contact with id ${contactId}!`,
+//       data: contact,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// };
+
+// export { getAllContacts, getContactById };
+
+import { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
+import ctrlWrapper from '../utils/ctrlWrapper.js'; // Обгортка для контролерів
 
 const getAllContacts = async (req, res) => {
-  try {
-    const contacts = await getAll();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+  const contacts = await getAll();
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: contacts,
+  });
 };
 
 const getContactById = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await getById(contactId);
+  const { contactId } = req.params;
+  const contact = await getById(contactId);
 
-    if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
-    }
-
-    res.status(200).json({
-      status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
-      data: contact,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal Server Error' });
+  if (!contact) {
+    res.status(404).json({ message: 'Contact not found' });
+    return;
   }
+
+  res.status(200).json({
+    status: 200,
+    message: `Successfully found contact with id ${contactId}!`,
+    data: contact,
+  });
 };
 
-export { getAllContacts, getContactById };
+const createContact = async (req, res) => {
+  const newContact = await addContact(req.body); // Виклик сервісу
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: newContact,
+  });
+};
+
+
+const updateContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const updatedContact = await updateContact(contactId, req.body);
+
+  if (!updatedContact) {
+    res.status(404).json({ message: 'Contact not found' });
+    return;
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: `Successfully updated contact with id ${contactId}!`,
+    data: updatedContact,
+  });
+};
+
+const deleteContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const deletedContact = await deleteContact(contactId);
+
+  if (!deletedContact) {
+    res.status(404).json({ message: 'Contact not found' });
+    return;
+  }
+
+  res.status(204).send(); // Без тіла відповіді
+};
+
+export {
+  ctrlWrapper(getAllContacts) as getAllContacts,
+  ctrlWrapper(getContactById) as getContactById,
+  ctrlWrapper(createContact) as createContact,
+  ctrlWrapper(updateContactById) as updateContactById,
+  ctrlWrapper(deleteContactById) as deleteContactById,
+};
