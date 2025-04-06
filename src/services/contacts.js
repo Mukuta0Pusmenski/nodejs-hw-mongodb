@@ -64,8 +64,20 @@ const addContact = async (contactData) => {
   return newContact;
 };
 
-export { addContact };
+const deleteContact = async (id) => {
+  try {
+    const contact = await Contact.findByIdAndDelete(id); // Видалення контакту через модель
+    return contact; // Повертаємо видалений контакт або null, якщо не знайдено
+  } catch (error) {
+    throw new Error('Unable to delete contact: ' + error.message);
+  }
+};
+
+
+// export { addContact };
 
 
 // Експорт функцій
-export { getAll, getById };
+// export { getAll, getById };
+
+export { getAll, getById, addContact, deleteContact };
