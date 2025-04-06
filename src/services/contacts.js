@@ -73,6 +73,20 @@ const deleteContact = async (id) => {
   }
 };
 
+const updateContact = async (id, updateData) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(id, updateData, {
+      new: true, // Повертає оновлений документ
+      runValidators: true, // Запускає валідацію моделі перед оновленням
+    });
+
+    return updatedContact; // Повертає оновлений контакт або null, якщо не знайдено
+  } catch (error) {
+    throw new Error('Unable to update contact: ' + error.message);
+  }
+};
+
+
 
 // export { addContact };
 
@@ -80,4 +94,4 @@ const deleteContact = async (id) => {
 // Експорт функцій
 // export { getAll, getById };
 
-export { getAll, getById, addContact, deleteContact };
+export { getAll, getById, addContact, deleteContact, updateContact };
