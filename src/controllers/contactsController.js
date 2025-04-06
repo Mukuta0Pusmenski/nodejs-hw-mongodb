@@ -144,19 +144,20 @@
 //   ctrlWrapper(deleteContactById) as deleteContactById,
 // };
 
-import { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
-import ctrlWrapper from '../utils/ctrlWrapper.js'; // Обгортка для контролерів
+iimport { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
+import ctrlWrapper from '../utils/ctrlWrapper.js';
 
-const getAllContacts = async (req, res) => {
+// Обгортаємо функції без повторного оголошення імені
+const wrappedGetAllContacts = ctrlWrapper(async (req, res) => {
   const contacts = await getAll();
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
     data: contacts,
   });
-};
+});
 
-const getContactById = async (req, res) => {
+const wrappedGetContactById = ctrlWrapper(async (req, res) => {
   const { contactId } = req.params;
   const contact = await getById(contactId);
 
@@ -170,18 +171,18 @@ const getContactById = async (req, res) => {
     message: `Successfully found contact with id ${contactId}!`,
     data: contact,
   });
-};
+});
 
-const createContact = async (req, res) => {
+const wrappedCreateContact = ctrlWrapper(async (req, res) => {
   const newContact = await addContact(req.body);
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
     data: newContact,
   });
-};
+});
 
-const updateContactById = async (req, res) => {
+const wrappedUpdateContactById = ctrlWrapper(async (req, res) => {
   const { contactId } = req.params;
   const updatedContact = await updateContact(contactId, req.body);
 
@@ -195,9 +196,9 @@ const updateContactById = async (req, res) => {
     message: `Successfully updated contact with id ${contactId}!`,
     data: updatedContact,
   });
-};
+});
 
-const deleteContactById = async (req, res) => {
+const wrappedDeleteContactById = ctrlWrapper(async (req, res) => {
   const { contactId } = req.params;
   const deletedContact = await deleteContact(contactId);
 
@@ -207,10 +208,13 @@ const deleteContactById = async (req, res) => {
   }
 
   res.status(204).send(); // Без тіла відповіді
-};
+});
 
-export const getAllContacts = ctrlWrapper(getAllContacts);
-export const getContactById = ctrlWrapper(getContactById);
-export const createContact = ctrlWrapper(createContact);
-export const updateContactById = ctrlWrapper(updateContactById);
-export const deleteContactById = ctrlWrapper(deleteContactById);
+// Експорт тільки обгорнутих функцій без конфліктів
+export {
+  wrappedGetAllContacts as getAllContacts,
+  wrappedGetContactById as getContactById,
+  wrappedCreateContact as createContact,
+  wrappedUpdateContactById as updateContactById,
+  wrappedDeleteContactById as deleteContactById,
+};
