@@ -47,3 +47,4 @@ const setupServer = () => {
 export default setupServer;
 
 console.log('Server setup complete.');
+console.log('Server setup complete?.'); // This line is for debugging purposes
