@@ -23,8 +23,8 @@
 
 // console.log('Server setup complete.'); // This line is for debugging purposes
 
-import express from 'express';
-import contactsRouter from './routers/contacts.js';
+// import express from 'express';
+// import contactsRouter from './routers/contacts.js';
 
 // const setupServer = () => {
 //   const app = express();
