@@ -50,8 +50,15 @@ app.listen(PORT, () => {
   });
 };
 
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+}).on('error', (err) => {
+  console.error('Error starting server:', err.message);
+});
+
+
 export default setupServer;
 
 console.log('Server setup complete.');
-console.log('Server setup complete?.'); // This line is for debugging purposes
+console.log('Server setup complete?.'); // This line is for debugging purposes # PORT=3000
 console.log('not Server setup complete!!');
