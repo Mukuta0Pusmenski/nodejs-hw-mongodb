@@ -55,4 +55,3 @@ export default setupServer;
 console.log('Server setup complete.');
 console.log('Server setup complete?.'); // This line is for debugging purposes
 console.log('not Server setup complete!!');
-console.log('not Server setup complete?');
