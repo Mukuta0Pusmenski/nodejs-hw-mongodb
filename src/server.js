@@ -56,13 +56,12 @@ const setupServer = () => {
 
 
   // const PORT = process.env.PORT;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Оголошується один раз у потрібному контексті
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-}).on('error', (err) => {
-  console.error(`Failed to start server on port ${PORT}:`, err.message);
 });
+
 
 
 
