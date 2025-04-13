@@ -118,4 +118,4 @@ console.log('Server setup complete.');
 console.log(`Using port: ${process.env.PORT || 3000}`);
 console.log(`Using port from environment: ${process.env.PORT}`);
 console.log('Environment variables:', process.env);
-
+console.log('agan this comand?')
