@@ -87,6 +87,40 @@
 // console.log(`Using port: ${process.env.PORT || 3000}`);
 
 
+// import express from 'express';
+// import contactsRouter from './routers/contacts.js';
+
+// const setupServer = () => {
+//   const app = express();
+
+//   app.use(express.json());
+//   app.use('/api', contactsRouter);
+
+//   // Middleware для обробки 404
+//   app.use((req, res) => {
+//     res.status(404).json({ message: 'Not found' });
+//   });
+
+//   // Оголошуємо PORT тільки один раз
+//   const PORT = process.env.PORT || 3000;
+
+//   // Запуск сервера з обробкою помилок
+//   app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+//   }).on('error', (err) => {
+//     console.error(`Error starting server on port ${PORT}:`, err.message);
+//   });
+// };
+
+// export default setupServer;
+
+// console.log('Server setup complete.');
+// console.log(`Using port: ${process.env.PORT || 3000}`);
+// console.log(`Using port from environment: ${process.env.PORT}`);
+// console.log('Environment variables:', process.env);
+// console.log('agan this comand?')
+
+
 import express from 'express';
 import contactsRouter from './routers/contacts.js';
 
@@ -101,8 +135,8 @@ const setupServer = () => {
     res.status(404).json({ message: 'Not found' });
   });
 
-  // Оголошуємо PORT тільки один раз
-  const PORT = process.env.PORT || 3000;
+  // Силове коректування PORT
+  const PORT = isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT);
 
   // Запуск сервера з обробкою помилок
   app.listen(PORT, () => {
@@ -114,8 +148,7 @@ const setupServer = () => {
 
 export default setupServer;
 
+// Діагностика
 console.log('Server setup complete.');
-console.log(`Using port: ${process.env.PORT || 3000}`);
-console.log(`Using port from environment: ${process.env.PORT}`);
-console.log('Environment variables:', process.env);
-console.log('agan this comand?')
+console.log(`RAW PORT value: ${process.env.PORT}`);
+console.log(`Processed PORT value: ${isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT)}`);
