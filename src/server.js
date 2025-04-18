@@ -187,3 +187,4 @@ const setupServer = () => {
 
 export default setupServer;
 
+console.log('Server setup complete.?.');
