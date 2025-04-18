@@ -21,17 +21,34 @@
 
 // export default router;
 
+// import express from 'express';
+// import {
+//   getAllContacts,
+//   getContactById,
+//   createContact,
+// } from '../controllers/contactsController.js';
+
+// const router = express.Router();
+
+// router.get('/contacts', getAllContacts);
+// router.get('/contacts/:contactId', getContactById);
+// router.post('/contacts', createContact); // Новий маршрут для додавання контакту
+
+// export default router;
+
 import express from 'express';
 import {
   getAllContacts,
   getContactById,
   createContact,
 } from '../controllers/contactsController.js';
+import ctrlWrapper from '../utils/ctrlWrapper.js';
 
 const router = express.Router();
 
-router.get('/contacts', getAllContacts);
-router.get('/contacts/:contactId', getContactById);
-router.post('/contacts', createContact); // Новий маршрут для додавання контакту
+router.get('/contacts', ctrlWrapper(getAllContacts));
+router.get('/contacts/:contactId', ctrlWrapper(getContactById));
+router.post('/contacts', ctrlWrapper(createContact)); // Новий маршрут для додавання контакту
 
 export default router;
+

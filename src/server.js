@@ -121,8 +121,42 @@
 // console.log('agan this comand?')
 
 
+// import express from 'express';
+// import contactsRouter from './routers/contacts.js';
+
+// const setupServer = () => {
+//   const app = express();
+
+//   app.use(express.json());
+//   app.use('/api', contactsRouter);
+
+//   // Middleware для обробки 404
+//   app.use((req, res) => {
+//     res.status(404).json({ message: 'Not found' });
+//   });
+
+//   // Силове коректування PORT
+//   const PORT = isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT);
+
+//   // Запуск сервера з обробкою помилок
+//   app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+//   }).on('error', (err) => {
+//     console.error(`Error starting server on port ${PORT}:`, err.message);
+//   });
+// };
+
+// export default setupServer;
+
+// // Діагностика
+// console.log('Server setup complete.');
+// console.log(`RAW PORT value: ${process.env.PORT}`);
+// console.log(`Processed PORT value: ${isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT)}`);
+
 import express from 'express';
 import contactsRouter from './routers/contacts.js';
+import notFoundHandler from './middlewares/notFoundHandler.js';
+import errorHandler from './middlewares/errorHandler.js'; // Імпорт middleware обробки помилок
 
 const setupServer = () => {
   const app = express();
@@ -130,10 +164,11 @@ const setupServer = () => {
   app.use(express.json());
   app.use('/api', contactsRouter);
 
-  // Middleware для обробки 404
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Not found' });
-  });
+  // Middleware для обробки 404 (видаляємо ручний `res.status(404)` і замінюємо `notFoundHandler`)
+  app.use(notFoundHandler); // Для обробки неіснуючих маршрутів
+  
+  // Middleware для обробки помилок
+  app.use(errorHandler);
 
   // Силове коректування PORT
   const PORT = isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT);
@@ -144,11 +179,11 @@ const setupServer = () => {
   }).on('error', (err) => {
     console.error(`Error starting server on port ${PORT}:`, err.message);
   });
+
+  console.log('Server setup complete.');
+  console.log(`RAW PORT value: ${process.env.PORT}`);
+  console.log(`Processed PORT value: ${PORT}`);
 };
 
 export default setupServer;
 
-// Діагностика
-console.log('Server setup complete.');
-console.log(`RAW PORT value: ${process.env.PORT}`);
-console.log(`Processed PORT value: ${isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT)}`);
