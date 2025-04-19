@@ -220,6 +220,76 @@
 // };
 
 
+// import createError from 'http-errors';
+// import { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
+
+// const getAllContacts = async (req, res) => {
+//   const contacts = await getAll();
+//   res.status(200).json({
+//     status: 200,
+//     message: 'Successfully found contacts!',
+//     data: contacts,
+//   });
+// };
+
+// const getContactById = async (req, res) => {
+//   const { contactId } = req.params;
+//   const contact = await getById(contactId);
+
+//   if (!contact) {
+//     throw createError(404, "Contact not found"); // Використання http-errors
+//   }
+
+//   res.status(200).json({
+//     status: 200,
+//     message: `Successfully found contact with id ${contactId}!`,
+//     data: contact,
+//   });
+// };
+
+// const createContact = async (req, res) => {
+//   const newContact = await addContact(req.body);
+//   res.status(201).json({
+//     status: 201,
+//     message: 'Successfully created a contact!',
+//     data: newContact,
+//   });
+// };
+
+// const updateContactById = async (req, res) => {
+//   const { contactId } = req.params;
+//   const updatedContact = await updateContact(contactId, req.body);
+
+//   if (!updatedContact) {
+//     throw createError(404, "Contact not found"); // Використання http-errors
+//   }
+
+//   res.status(200).json({
+//     status: 200,
+//     message: `Successfully updated contact with id ${contactId}!`,
+//     data: updatedContact,
+//   });
+// };
+
+// const deleteContactById = async (req, res) => {
+//   const { contactId } = req.params;
+//   const deletedContact = await deleteContact(contactId);
+
+//   if (!deletedContact) {
+//     throw createError(404, "Contact not found"); // Використання http-errors
+//   }
+
+//   res.status(204).send(); // Без тіла відповіді
+// };
+
+// export {
+//   getAllContacts,
+//   getContactById,
+//   createContact,
+//   updateContactById,
+//   deleteContactById,
+// };
+
 import createError from 'http-errors';
 import { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
 
@@ -237,7 +307,7 @@ const getContactById = async (req, res) => {
   const contact = await getById(contactId);
 
   if (!contact) {
-    throw createError(404, "Contact not found"); // Використання http-errors
+    throw createError(404, "Contact not found");
   }
 
   res.status(200).json({
@@ -261,7 +331,7 @@ const updateContactById = async (req, res) => {
   const updatedContact = await updateContact(contactId, req.body);
 
   if (!updatedContact) {
-    throw createError(404, "Contact not found"); // Використання http-errors
+    throw createError(404, "Contact not found");
   }
 
   res.status(200).json({
@@ -276,10 +346,10 @@ const deleteContactById = async (req, res) => {
   const deletedContact = await deleteContact(contactId);
 
   if (!deletedContact) {
-    throw createError(404, "Contact not found"); // Використання http-errors
+    throw createError(404, "Contact not found");
   }
 
-  res.status(204).send(); // Без тіла відповіді
+  res.status(204).send();
 };
 
 export {
@@ -289,3 +359,4 @@ export {
   updateContactById,
   deleteContactById,
 };
+
