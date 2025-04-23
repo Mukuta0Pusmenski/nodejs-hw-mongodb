@@ -10,14 +10,51 @@ import { getAll, getById, addContact, updateContact, deleteContact } from '../se
 //   });
 // };
 
+// const getAllContacts = async (req, res) => {
+//   try {
+//     const { page = 1, perPage = 10 } = req.query; // Отримуємо параметри пагінації з запиту
+
+//     const totalItems = await getAll(); // Додаємо `await`, щоб отримати всі контакти
+//     const totalCount = totalItems.length; // Обчислюємо загальну кількість
+
+//     const contacts = totalItems.slice((page - 1) * perPage, (page - 1) * perPage + Number(perPage));
+
+//     res.status(200).json({
+//       status: 200,
+//       message: 'Successfully found contacts!',
+//       data: {
+//         data: contacts,
+//         page: Number(page),
+//         perPage: Number(perPage),
+//         totalItems: totalCount,
+//         totalPages: Math.ceil(totalCount / perPage),
+//         hasPreviousPage: Number(page) > 1,
+//         hasNextPage: Number(page) * Number(perPage) < totalCount,
+//       },
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Failed to retrieve contacts', error: error.message });
+//   }
+// };
+
 const getAllContacts = async (req, res) => {
   try {
-    const { page = 1, perPage = 10 } = req.query; // Отримуємо параметри пагінації з запиту
+    const { page = 1, perPage = 10, sortBy = 'name', sortOrder = 'asc' } = req.query; // Отримуємо параметри
 
-    const totalItems = await getAll(); // Додаємо `await`, щоб отримати всі контакти
-    const totalCount = totalItems.length; // Обчислюємо загальну кількість
+    const totalItems = await getAll();
+    const totalCount = totalItems.length;
 
-    const contacts = totalItems.slice((page - 1) * perPage, (page - 1) * perPage + Number(perPage));
+    // Сортуємо масив контактів
+    const sortedContacts = totalItems.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a[sortBy].localeCompare(b[sortBy]);
+      } else {
+        return b[sortBy].localeCompare(a[sortBy]);
+      }
+    });
+
+    // Пагінуємо відсортовані контакти
+    const contacts = sortedContacts.slice((page - 1) * perPage, (page - 1) * perPage + Number(perPage));
 
     res.status(200).json({
       status: 200,
@@ -36,6 +73,7 @@ const getAllContacts = async (req, res) => {
     res.status(500).json({ message: 'Failed to retrieve contacts', error: error.message });
   }
 };
+
 
 
 const getContactById = async (req, res) => {
