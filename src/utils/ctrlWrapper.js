@@ -3,7 +3,7 @@ const ctrlWrapper = (ctrl) => {
     try {
       await ctrl(req, res, next);
     } catch (err) {
-      next(err); // Передає помилку в `errorHandler`
+      next(err); 
     }
   };
 };

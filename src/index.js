@@ -4,5 +4,5 @@ import setupServer from './server.js';
 
 dotenv.config();
 
-await initMongoConnection(); // Підключення до MongoDB
-setupServer(); // Запуск сервера
+await initMongoConnection(); 
+setupServer(); 

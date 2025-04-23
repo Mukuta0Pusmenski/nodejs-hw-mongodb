@@ -8,12 +8,12 @@ const setupServer = () => {
   const app = express();
 
   app.use(express.json());
-  app.use(contactsRouter); // Підключення маршрутів без додаткового префікса
+  app.use(contactsRouter); 
 
-  // Middleware для обробки неіснуючих маршрутів
+ 
   app.use(notFoundHandler);
 
-  // Middleware для обробки помилок
+
   app.use(errorHandler);
 
   const PORT = isNaN(Number(process.env.PORT)) ? 3000 : Number(process.env.PORT);
