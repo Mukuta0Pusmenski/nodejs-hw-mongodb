@@ -1,14 +1,42 @@
 import createError from 'http-errors';
 import { getAll, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
 
+// const getAllContacts = async (req, res) => {
+//   const contacts = await getAll();
+//   res.status(200).json({
+//     status: 200,
+//     message: 'Successfully found contacts!',
+//     data: contacts,
+//   });
+// };
+
 const getAllContacts = async (req, res) => {
-  const contacts = await getAll();
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully found contacts!',
-    data: contacts,
-  });
+  try {
+    const { page = 1, perPage = 10 } = req.query; // Отримуємо параметри пагінації з запиту
+
+    const totalItems = await getAll(); // Додаємо `await`, щоб отримати всі контакти
+    const totalCount = totalItems.length; // Обчислюємо загальну кількість
+
+    const contacts = totalItems.slice((page - 1) * perPage, (page - 1) * perPage + Number(perPage));
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: {
+        data: contacts,
+        page: Number(page),
+        perPage: Number(perPage),
+        totalItems: totalCount,
+        totalPages: Math.ceil(totalCount / perPage),
+        hasPreviousPage: Number(page) > 1,
+        hasNextPage: Number(page) * Number(perPage) < totalCount,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to retrieve contacts', error: error.message });
+  }
 };
+
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
