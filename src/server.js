@@ -28,3 +28,5 @@ const setupServer = () => {
 };
 
 export default setupServer;
+
+console.log('Server module loaded.');
