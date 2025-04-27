@@ -26,7 +26,7 @@ const contactSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    versionKey: false, // Вимикаємо поле "__v"
+    versionKey: false, 
   }
 );
 

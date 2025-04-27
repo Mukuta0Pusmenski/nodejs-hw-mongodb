@@ -45,4 +45,19 @@ const updateContact = async (id, updateData) => {
   }
 };
 
-export { getAll, getById, addContact, deleteContact, updateContact };
+const fetchContacts = async (page, perPage, sortBy, sortOrder, type, isFavourite) => {
+  const filter = {};
+  if (type) filter.contactType = type;
+  if (isFavourite !== undefined) filter.isFavourite = isFavourite === 'true';
+
+  const totalItems = await Contact.countDocuments(filter);
+
+  const contacts = await Contact.find(filter)
+    .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
+    .skip((page - 1) * perPage)
+    .limit(Number(perPage));
+
+  return { contacts, totalItems };
+};
+
+export { getAll, getById, addContact, deleteContact, updateContact, fetchContacts };
