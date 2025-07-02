@@ -88,6 +88,7 @@ const initMongoConnection = async () => {
 
     await mongoose.connect(url, { user, pass, dbName: db });
     console.log('MongoDB connected');
+    await mongoose.connect(process.env.MONGODB_URI);
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
     process.exit(1);
