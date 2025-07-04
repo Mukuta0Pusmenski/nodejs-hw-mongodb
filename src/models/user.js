@@ -1,9 +1,42 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const userSchema = new Schema({
-  name:     { type: String, required: true },
-  email:    { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
+const SALT_ROUNDS = 10;
 
-export default model('User', userSchema);
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
+  },
+  {
+    timestamps: true,
+    versionKey: false
+  }
+);
+
+// Перед збереженням юзера — захешувати пароль
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+  next();
+});
+
+// Метод для перевірки відповідності plain → hash
+userSchema.methods.isValidPassword = async function (plainPassword) {
+  return bcrypt.compare(plainPassword, this.password);
+};
+
+export default mongoose.model('User', userSchema);
