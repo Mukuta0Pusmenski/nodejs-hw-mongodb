@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Перед збереженням юзера — захешувати пароль
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -34,7 +33,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Метод для перевірки відповідності plain → hash
 userSchema.methods.isValidPassword = async function (plainPassword) {
   return bcrypt.compare(plainPassword, this.password);
 };

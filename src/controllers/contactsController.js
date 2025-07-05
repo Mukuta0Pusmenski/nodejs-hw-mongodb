@@ -3,27 +3,28 @@ import * as service from '../services/contacts.js';
 
 export const listContacts = async (req, res, next) => {
   try {
-    const { page, limit, sortBy, sortOrder } = req.query;
+    const page  = Number(req.query.page)    || 1;
+    const limit = Number(req.query.limit)
+                    || Number(req.query.perPage)
+                    || 20;
+    const { sortBy, sortOrder } = req.query;
+
     const { contacts, totalItems } = await service.listContacts(
       req.user._id,
-      {
-        page: Number(page) || 1,
-        limit: Number(limit) || 20,
-        sortBy,
-        sortOrder
-      }
+      { page, limit, sortBy, sortOrder }
     );
+
     res.json({
       status: 200,
       message: 'Contacts retrieved successfully',
       data: {
         contacts,
-        page: Number(page) || 1,
-        perPage: Number(limit) || 20,
+        page,
+        perPage: limit,
         totalItems,
-        totalPages: Math.ceil(totalItems / (Number(limit) || 20)),
-        hasPreviousPage: (Number(page) || 1) > 1,
-        hasNextPage: (Number(page) || 1) * (Number(limit) || 20) < totalItems
+        totalPages: Math.ceil(totalItems / limit),
+        hasPreviousPage: page > 1,
+        hasNextPage: page * limit < totalItems
       }
     });
   } catch (err) {
@@ -52,7 +53,11 @@ export const createContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    const updated = await service.updateContact(req.params.id, req.body, req.user._id);
+    const updated = await service.updateContact(
+      req.params.id,
+      req.body,
+      req.user._id
+    );
     if (!updated) throw createError(404, 'Contact not found');
     res.json({ status: 200, message: 'Contact updated', data: updated });
   } catch (err) {
