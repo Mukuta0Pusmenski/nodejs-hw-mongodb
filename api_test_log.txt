@@ -1,0 +1,39 @@
+1) LOGIN
+HTTP/1.1 200 OK
+Date: Sat, 05 Jul 2025 08:55:34 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+etag: W/"fe-GuIGOmHx76WWU4uuUr9gkpjXVfY"
+rndr-id: fa9798b0-ba0e-4d51
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NjdlNTZkNGIxODczODQ1YjdmZDljZiIsImlhdCI6MTc1MTcwNTczNCwiZXhwIjoxNzU0Mjk3NzM0fQ.2ai9nLc9xcCV7Q-Q6EO9MEI-_d9fv_5OYZPwVeT0-m0; Max-Age=2592000; Path=/; Expires=Mon, 04 Aug 2025 08:55:34 GMT; HttpOnly
+Set-Cookie: accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NjdlNTZkNGIxODczODQ1YjdmZDljZiIsImlhdCI6MTc1MTcwNTczNCwiZXhwIjoxNzUxNzA2NjM0fQ.fboqvtGmenAD-XZciaFHHdnoRWgZLfM7qsfALw8rR58; Max-Age=900; Path=/; Expires=Sat, 05 Jul 2025 09:10:34 GMT; HttpOnly
+vary: Accept-Encoding
+x-powered-by: Express
+x-render-origin-server: Render
+cf-cache-status: DYNAMIC
+Server: cloudflare
+CF-RAY: 95a5a4e04fa0fff5-AMS
+alt-svc: h3=":443"; ma=86400
+
+{"status":200,"message":"Successfully logged in a user!","data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NjdlNTZkNGIxODczODQ1YjdmZDljZiIsImlhdCI6MTc1MTcwNTczNCwiZXhwIjoxNzUxNzA2NjM0fQ.fboqvtGmenAD-XZciaFHHdnoRWgZLfM7qsfALw8rR58"}}
+2) GET empty contacts
+HTTP/1.1 200 OK
+Date: Sat, 05 Jul 2025 08:55:36 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+etag: W/"b0-9yRfQYp+GF+kMSOWBRLkAxZ3XzU"
+rndr-id: 28114b5e-c5f7-4f8d
+vary: Accept-Encoding
+x-powered-by: Express
+x-render-origin-server: Render
+cf-cache-status: DYNAMIC
+Server: cloudflare
+CF-RAY: 95a5a4edd8e89fae-AMS
+alt-svc: h3=":443"; ma=86400
+
+{"status":200,"message":"Contacts retrieved successfully","data":{"contacts":[],"page":1,"perPage":2,"totalItems":0,"totalPages":0,"hasPreviousPage":false,"hasNextPage":false}}
+3) CREATE contact
+{"status":201,"message":"Contact created","data":{"name":"Bob","email":"bob@example.com","phone":"000-111","message":"Hi!","owner":"6867e56d4b1873845b7fd9cf","_id":"6868e8898d6233c366ee91d0","createdAt":"2025-07-05T08:55:37.949Z","updatedAt":"2025-07-05T08:55:37.949Z"}}
+test_api.sh: line 28: syntax error near unexpected token `('
