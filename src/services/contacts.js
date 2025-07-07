@@ -226,9 +226,10 @@ export const updateContact = async (id, update, userId) => {
  * Видаляє контакт за id і userId
  */
 export const deleteContact = async (id, userId) => {
-  const contact = await Contact.findOneAndRemove({ _id: id, userId });
+  const contact = await Contact.findOneAndDelete({ _id: id, userId });
   if (!contact) {
     throw createError(404, 'Contact not found');
   }
   return contact;
 };
+
