@@ -1,50 +1,254 @@
 
+// // // // // import express from 'express';
+// // // // // import cookieParser from 'cookie-parser';
+// // // // // import { sendResetEmailSchema } from '../schemas/auth.js';
+// // // // // import { sendResetEmail } from '../controllers/auth.js';
+// // // // // import { resetPwdSchema }  from '../schemas/auth.js';
+// // // // // import { resetPassword } from '../controllers/auth.js';
+// // // // // import { sendResetEmail, resetPassword } from '../controllers/auth.js';
+// // // // // import { sendResetEmailSchema, resetPwdSchema } from '../schemas/auth.js';
+
+
+// // // // // import {
+// // // // //   register,
+// // // // //   login,
+// // // // //   refresh,
+// // // // //   logout
+// // // // // } from '../controllers/auth.js';
+// // // // // import { validateBody } from '../middlewares/validateBody.js';
+// // // // // import { registerSchema, loginSchema } from '../schemas/auth.js';
+
+// // // // // const router = express.Router();
+// // // // // router.use(cookieParser());
+
+// // // // // router.post('/register', validateBody(registerSchema), register);
+// // // // // router.post('/login',    validateBody(loginSchema),    login);
+// // // // // router.post('/refresh',  refresh);
+// // // // // router.post('/logout', logout);
+// // // // // router.post(
+// // // // //   '/send-reset-email',
+// // // // //   validateBody(sendResetEmailSchema),
+// // // // //   sendResetEmail
+// // // // // );
+
+// // // // // router.post(
+// // // // //   '/reset-pwd',
+// // // // //   validateBody(resetPwdSchema),
+// // // // //   resetPassword
+// // // // // );
+
+
+// // // // // export default router;
+
+
+// // // // import express from 'express';
+// // // // import cookieParser from 'cookie-parser';
+// // // // // import { authenticate } from '../middlewares/authenticate.js';
+// // // // import { updateAvatar } from '../controllers/users.js';
+
+// // // // import {
+// // // //   register,
+// // // //   login,
+// // // //   refresh,
+// // // //   logout,
+// // // //   sendResetEmail,
+// // // //   resetPassword
+// // // // } from '../controllers/auth.js';
+
+// // // // import { validateBody } from '../middlewares/validateBody.js';
+// // // // import {
+// // // //   registerSchema,
+// // // //   loginSchema,
+// // // //   sendResetEmailSchema,
+// // // //   resetPwdSchema
+// // // // } from '../schemas/auth.js';
+
+// // // // const router = express.Router();
+// // // // router.use(cookieParser());
+
+// // // // router.post('/register',
+// // // //   validateBody(registerSchema),
+// // // //   register
+// // // // );
+
+// // // // router.post('/login',
+// // // //   validateBody(loginSchema),
+// // // //   login
+// // // // );
+
+// // // // router.post('/refresh',
+// // // //   refresh
+// // // // );
+
+// // // // router.post('/logout',
+// // // //   logout
+// // // // );
+
+// // // // router.post('/send-reset-email',
+// // // //   validateBody(sendResetEmailSchema),
+// // // //   sendResetEmail
+// // // // );
+
+// // // // router.post('/reset-pwd',
+// // // //   validateBody(resetPwdSchema),
+// // // //   resetPassword
+// // // // );
+
+// // // // // router.patch(
+// // // // //   '/users/avatar',
+// // // // //   authenticate,
+// // // // //   upload.single('avatar'),
+// // // // //   updateAvatar
+// // // // // );
+
+// // // // export default router;
+
+// // // import express from 'express';
+// // // import cookieParser from 'cookie-parser';
+// // // import {
+// // //   register,
+// // //   login,
+// // //   refresh,
+// // //   logout,
+// // //   sendResetEmail,
+// // //   resetPassword
+// // // } from '../controllers/auth.js';
+// // // import { validateBody } from '../middlewares/validateBody.js';
+// // // import {
+// // //   registerSchema,
+// // //   loginSchema,
+// // //   sendResetEmailSchema,
+// // //   resetPwdSchema
+// // // } from '../schemas/auth.js';
+
+// // // const router = express.Router();
+// // // router.use(cookieParser());
+
+// // // // реєстрація
+// // // router.post(
+// // //   '/register',
+// // //   validateBody(registerSchema),
+// // //   register
+// // // );
+
+// // // // логін
+// // // router.post(
+// // //   '/login',
+// // //   validateBody(loginSchema),
+// // //   login
+// // // );
+
+// // // // refresh токенів
+// // // router.post(
+// // //   '/refresh',
+// // //   refresh
+// // // );
+
+// // // // логаут
+// // // router.post(
+// // //   '/logout',
+// // //   logout
+// // // );
+
+// // // // відправити лист для скидання пароля
+// // // router.post(
+// // //   '/send-reset-email',
+// // //   validateBody(sendResetEmailSchema),
+// // //   sendResetEmail
+// // // );
+
+// // // // встановити новий пароль по токену
+// // // router.post(
+// // //   '/reset-password/:token',
+// // //   validateBody(resetPwdSchema),
+// // //   resetPassword
+// // // );
+
+// // // export default router;
+
+// // import express from 'express';
+// // import cookieParser from 'cookie-parser';
+// // import {
+// //   register,
+// //   login,
+// //   refresh,
+// //   logout,
+// //   sendResetEmail,
+// //   resetPassword
+// // } from '../controllers/auth.js';
+// // import { validateBody } from '../middlewares/validateBody.js';
+// // import {
+// //   registerSchema,
+// //   loginSchema,
+// //   sendResetEmailSchema,
+// //   resetPwdSchema
+// // } from '../schemas/auth.js';
+
+// // const router = express.Router();
+// // router.use(cookieParser());
+
+// // router.post('/register',  validateBody(registerSchema),       register);
+// // router.post('/login',     validateBody(loginSchema),          login);
+// // router.post('/refresh',                                      refresh);
+// // router.post('/logout',                                       logout);
+
+// // router.post(
+// //   '/send-reset-email',
+// //   validateBody(sendResetEmailSchema),
+// //   sendResetEmail
+// // );
+
+// // router.post(
+// //   '/reset-password/:token',
+// //   validateBody(resetPwdSchema),
+// //   resetPassword
+// // );
+
+// // export default router;
+
+// // ───────────────────────────────────────────────────────────────────
+// // src/routers/auth.js
 // import express from 'express';
 // import cookieParser from 'cookie-parser';
-// import { sendResetEmailSchema } from '../schemas/auth.js';
-// import { sendResetEmail } from '../controllers/auth.js';
-// import { resetPwdSchema }  from '../schemas/auth.js';
-// import { resetPassword } from '../controllers/auth.js';
-// import { sendResetEmail, resetPassword } from '../controllers/auth.js';
-// import { sendResetEmailSchema, resetPwdSchema } from '../schemas/auth.js';
-
-
 // import {
 //   register,
 //   login,
 //   refresh,
-//   logout
+//   logout,
+//   sendResetEmail,
+//   resetPassword
 // } from '../controllers/auth.js';
 // import { validateBody } from '../middlewares/validateBody.js';
-// import { registerSchema, loginSchema } from '../schemas/auth.js';
+// import {
+//   registerSchema,
+//   loginSchema,
+//   sendResetEmailSchema,
+//   resetPwdSchema
+// } from '../schemas/auth.js';
 
 // const router = express.Router();
 // router.use(cookieParser());
 
-// router.post('/register', validateBody(registerSchema), register);
-// router.post('/login',    validateBody(loginSchema),    login);
-// router.post('/refresh',  refresh);
-// router.post('/logout', logout);
+// router.post('/register',          validateBody(registerSchema),      register);
+// router.post('/login',             validateBody(loginSchema),         login);
+// router.post('/refresh',                                               refresh);
+// router.post('/logout',                                                logout);
+
 // router.post(
 //   '/send-reset-email',
 //   validateBody(sendResetEmailSchema),
 //   sendResetEmail
 // );
-
 // router.post(
-//   '/reset-pwd',
+//   '/reset-password/:token',
 //   validateBody(resetPwdSchema),
 //   resetPassword
 // );
 
-
 // export default router;
-
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
-// import { authenticate } from '../middlewares/authenticate.js';
-import { updateAvatar } from '../controllers/users.js';
 
 import {
   register,
@@ -66,39 +270,21 @@ import {
 const router = express.Router();
 router.use(cookieParser());
 
-router.post('/register',
-  validateBody(registerSchema),
-  register
-);
+router.post('/register',          validateBody(registerSchema), register);
+router.post('/login',             validateBody(loginSchema),    login);
+router.post('/refresh',                                       refresh);
+router.post('/logout',                                        logout);
 
-router.post('/login',
-  validateBody(loginSchema),
-  login
-);
-
-router.post('/refresh',
-  refresh
-);
-
-router.post('/logout',
-  logout
-);
-
-router.post('/send-reset-email',
+router.post(
+  '/send-reset-email',
   validateBody(sendResetEmailSchema),
   sendResetEmail
 );
 
-router.post('/reset-pwd',
+router.post(
+  '/reset-password/:token',
   validateBody(resetPwdSchema),
   resetPassword
 );
-
-// router.patch(
-//   '/users/avatar',
-//   authenticate,
-//   upload.single('avatar'),
-//   updateAvatar
-// );
 
 export default router;

@@ -1,48 +1,130 @@
-// // // // // // import { Router } from 'express';
-// // // // // // import { validateBody } from '../middlewares/validateBody.js';
-// // // // // // import {
-// // // // // //   createContactSchema,
-// // // // // //   updateContactSchema
-// // // // // // } from '../schemas/contact.js';
+// // // // // // // // import { Router } from 'express';
+// // // // // // // // import { validateBody } from '../middlewares/validateBody.js';
+// // // // // // // // import {
+// // // // // // // //   createContactSchema,
+// // // // // // // //   updateContactSchema
+// // // // // // // // } from '../schemas/contact.js';
+// // // // // // // // import * as ctrl from '../controllers/contactsController.js';
+
+// // // // // // // // const router = Router();
+
+// // // // // // // // router.get('/',    ctrl.listContacts);
+// // // // // // // // router.get('/:id', ctrl.getContact);
+
+// // // // // // // // router.post(
+// // // // // // // //   '/',
+// // // // // // // //   validateBody(createContactSchema),
+// // // // // // // //   ctrl.createContact
+// // // // // // // // );
+
+// // // // // // // // router.patch(
+// // // // // // // //   '/:id',
+// // // // // // // //   validateBody(updateContactSchema),
+// // // // // // // //   ctrl.updateContact
+// // // // // // // // );
+
+// // // // // // // // router.delete('/:id', ctrl.deleteContact);
+
+// // // // // // // // export default router;
+// // // // // // // import express from 'express';
+// // // // // // // import authenticate     from '../middlewares/authenticate.js';
+// // // // // // // import { validateBody, validateParams } from '../middlewares/validateBody.js';
+// // // // // // // import * as ctrl        from '../controllers/contactsController.js';
+// // // // // // // import {
+// // // // // // //   contactPostSchema,
+// // // // // // //   contactPatchSchema,
+// // // // // // //   paramsSchema
+// // // // // // // } from '../schemas/validationSchemas.js';
+
+// // // // // // // const router = express.Router();
+
+// // // // // // // // захищаємо всі маршрути токеном
+// // // // // // // router.use(authenticate);
+
+// // // // // // // router.get('/',                    ctrl.getAllContacts);
+// // // // // // // router.get('/:id', validateParams(paramsSchema), ctrl.getContactById);
+
+// // // // // // // router.post(
+// // // // // // //   '/',
+// // // // // // //   validateBody(contactPostSchema),
+// // // // // // //   ctrl.createContact
+// // // // // // // );
+
+// // // // // // // router.patch(
+// // // // // // //   '/:id',
+// // // // // // //   validateParams(paramsSchema),
+// // // // // // //   validateBody(contactPatchSchema),
+// // // // // // //   ctrl.updateContactById
+// // // // // // // );
+
+// // // // // // // router.delete(
+// // // // // // //   '/:id',
+// // // // // // //   validateParams(paramsSchema),
+// // // // // // //   ctrl.deleteContactById
+// // // // // // // );
+
+// // // // // // // export default router;
+// // // // // // import express from 'express';
+// // // // // // import authenticate from '../middlewares/authenticate.js';
+// // // // // // import { validateBody, validateParams } from '../middlewares/validateBody.js';
 // // // // // // import * as ctrl from '../controllers/contactsController.js';
+// // // // // // import {
+// // // // // //   contactPostSchema,
+// // // // // //   contactPatchSchema,
+// // // // // //   paramsSchema
+// // // // // // } from '../schemas/contactSchemas.js';
 
-// // // // // // const router = Router();
+// // // // // // const router = express.Router();
 
-// // // // // // router.get('/',    ctrl.listContacts);
-// // // // // // router.get('/:id', ctrl.getContact);
+// // // // // // router.use(authenticate);
+
+// // // // // // router.get('/',                    ctrl.getAllContacts);
+// // // // // // router.get('/:id', validateParams(paramsSchema), ctrl.getContactById);
 
 // // // // // // router.post(
 // // // // // //   '/',
-// // // // // //   validateBody(createContactSchema),
+// // // // // //   validateBody(contactPostSchema),
 // // // // // //   ctrl.createContact
 // // // // // // );
 
 // // // // // // router.patch(
 // // // // // //   '/:id',
-// // // // // //   validateBody(updateContactSchema),
-// // // // // //   ctrl.updateContact
+// // // // // //   validateParams(paramsSchema),
+// // // // // //   validateBody(contactPatchSchema),
+// // // // // //   ctrl.updateContactById
 // // // // // // );
 
-// // // // // // router.delete('/:id', ctrl.deleteContact);
+// // // // // // router.delete(
+// // // // // //   '/:id',
+// // // // // //   validateParams(paramsSchema),
+// // // // // //   ctrl.deleteContactById
+// // // // // // );
 
 // // // // // // export default router;
 // // // // // import express from 'express';
-// // // // // import authenticate     from '../middlewares/authenticate.js';
+// // // // // import authenticate from '../middlewares/authenticate.js';
 // // // // // import { validateBody, validateParams } from '../middlewares/validateBody.js';
-// // // // // import * as ctrl        from '../controllers/contactsController.js';
+// // // // // import * as ctrl from '../controllers/contactsController.js';
 // // // // // import {
+// // // // //   paramsSchema,
 // // // // //   contactPostSchema,
-// // // // //   contactPatchSchema,
-// // // // //   paramsSchema
-// // // // // } from '../schemas/validationSchemas.js';
+// // // // //   contactPatchSchema
+// // // // // } from '../schemas/contactSchemas.js';
 
 // // // // // const router = express.Router();
 
-// // // // // // захищаємо всі маршрути токеном
 // // // // // router.use(authenticate);
 
-// // // // // router.get('/',                    ctrl.getAllContacts);
-// // // // // router.get('/:id', validateParams(paramsSchema), ctrl.getContactById);
+// // // // // router.get(
+// // // // //   '/',
+// // // // //   ctrl.getAllContacts
+// // // // // );
+
+// // // // // router.get(
+// // // // //   '/:id',
+// // // // //   validateParams(paramsSchema),
+// // // // //   ctrl.getContactById
+// // // // // );
 
 // // // // // router.post(
 // // // // //   '/',
@@ -64,34 +146,53 @@
 // // // // // );
 
 // // // // // export default router;
+
+
+
 // // // // import express from 'express';
 // // // // import authenticate from '../middlewares/authenticate.js';
+// // // // import { upload } from '../services/upload.js';
 // // // // import { validateBody, validateParams } from '../middlewares/validateBody.js';
-// // // // import * as ctrl from '../controllers/contactsController.js';
+// // // // // import * as ctrl from '../controllers/contactsController.js';
+// // // // import ctrl from '../controllers/contacts.js';
+// // // // import { contactPutSchema } from '../schemas/contact.js';
 // // // // import {
+// // // //   paramsSchema,
 // // // //   contactPostSchema,
-// // // //   contactPatchSchema,
-// // // //   paramsSchema
+// // // //   contactPatchSchema
 // // // // } from '../schemas/contactSchemas.js';
 
 // // // // const router = express.Router();
-
 // // // // router.use(authenticate);
 
-// // // // router.get('/',                    ctrl.getAllContacts);
-// // // // router.get('/:id', validateParams(paramsSchema), ctrl.getContactById);
+// // // // router.get('/', ctrl.getAllContacts);
+
+// // // // router.get(
+// // // //   '/:id',
+// // // //   validateParams(paramsSchema),
+// // // //   ctrl.getContactById
+// // // // );
 
 // // // // router.post(
 // // // //   '/',
+// // // //   upload.single('photo'),
 // // // //   validateBody(contactPostSchema),
 // // // //   ctrl.createContact
 // // // // );
 
 // // // // router.patch(
 // // // //   '/:id',
+// // // //   upload.single('photo'),
 // // // //   validateParams(paramsSchema),
 // // // //   validateBody(contactPatchSchema),
 // // // //   ctrl.updateContactById
+// // // // );
+
+// // // // router.patch(
+// // // //   '/:contactId',
+// // // //   authenticate,
+// // // //   validateBody(contactPutSchema),
+// // // //   ctrl.updateContact
 // // // // );
 
 // // // // router.delete(
@@ -101,44 +202,50 @@
 // // // // );
 
 // // // // export default router;
+
 // // // import express from 'express';
-// // // import authenticate from '../middlewares/authenticate.js';
+// // // import authenticate        from '../middlewares/authenticate.js';
+// // // import { upload }          from '../services/upload.js';
 // // // import { validateBody, validateParams } from '../middlewares/validateBody.js';
-// // // import * as ctrl from '../controllers/contactsController.js';
 // // // import {
 // // //   paramsSchema,
 // // //   contactPostSchema,
 // // //   contactPatchSchema
 // // // } from '../schemas/contactSchemas.js';
-
+// // // import * as ctrl from '../controllers/contactsController.js';
 // // // const router = express.Router();
 
+// // // // Усі маршрути під захистом
 // // // router.use(authenticate);
 
-// // // router.get(
-// // //   '/',
-// // //   ctrl.getAllContacts
-// // // );
+// // // // GET /contacts
+// // // router.get('/', ctrl.getAllContacts);
 
+// // // // GET /contacts/:id
 // // // router.get(
 // // //   '/:id',
 // // //   validateParams(paramsSchema),
 // // //   ctrl.getContactById
 // // // );
 
+// // // // POST /contacts  (JSON + optional photo)
 // // // router.post(
 // // //   '/',
+// // //   upload.single('photo'),
 // // //   validateBody(contactPostSchema),
 // // //   ctrl.createContact
 // // // );
 
+// // // // PATCH /contacts/:id  (оновлення полів і/або фото)
 // // // router.patch(
 // // //   '/:id',
+// // //   upload.single('photo'),
 // // //   validateParams(paramsSchema),
 // // //   validateBody(contactPatchSchema),
 // // //   ctrl.updateContactById
 // // // );
 
+// // // // DELETE /contacts/:id
 // // // router.delete(
 // // //   '/:id',
 // // //   validateParams(paramsSchema),
@@ -148,31 +255,33 @@
 // // // export default router;
 
 
-
 // // import express from 'express';
 // // import authenticate from '../middlewares/authenticate.js';
 // // import { upload } from '../services/upload.js';
 // // import { validateBody, validateParams } from '../middlewares/validateBody.js';
-// // // import * as ctrl from '../controllers/contactsController.js';
-// // import ctrl from '../controllers/contacts.js';
-// // import { contactPutSchema } from '../schemas/contact.js';
 // // import {
 // //   paramsSchema,
 // //   contactPostSchema,
 // //   contactPatchSchema
 // // } from '../schemas/contactSchemas.js';
+// // import * as ctrl from '../controllers/contactsController.js';
 
 // // const router = express.Router();
+
+// // // всі маршрути тільки для залогінених
 // // router.use(authenticate);
 
+// // // GET /contacts
 // // router.get('/', ctrl.getAllContacts);
 
+// // // GET /contacts/:id
 // // router.get(
 // //   '/:id',
 // //   validateParams(paramsSchema),
 // //   ctrl.getContactById
 // // );
 
+// // // POST /contacts  — створити з опцією фото
 // // router.post(
 // //   '/',
 // //   upload.single('photo'),
@@ -180,6 +289,7 @@
 // //   ctrl.createContact
 // // );
 
+// // // PATCH /contacts/:id — оновити поля і/або фото
 // // router.patch(
 // //   '/:id',
 // //   upload.single('photo'),
@@ -189,12 +299,14 @@
 // // );
 
 // // router.patch(
-// //   '/:contactId',
+// //   '/:id/photo',
 // //   authenticate,
-// //   validateBody(contactPutSchema),
-// //   ctrl.updateContact
+// //   validateParams(paramsSchema),
+// //   upload.single('photo'),
+// //   ctrl.updateContactById
 // // );
 
+// // // DELETE /contacts/:id
 // // router.delete(
 // //   '/:id',
 // //   validateParams(paramsSchema),
@@ -204,8 +316,8 @@
 // // export default router;
 
 // import express from 'express';
-// import authenticate        from '../middlewares/authenticate.js';
-// import { upload }          from '../services/upload.js';
+// import authenticate from '../middlewares/authenticate.js';
+// import { upload } from '../services/upload.js';
 // import { validateBody, validateParams } from '../middlewares/validateBody.js';
 // import {
 //   paramsSchema,
@@ -213,22 +325,21 @@
 //   contactPatchSchema
 // } from '../schemas/contactSchemas.js';
 // import * as ctrl from '../controllers/contactsController.js';
-// const router = express.Router();
 
-// // Усі маршрути під захистом
+// const router = express.Router();
 // router.use(authenticate);
 
 // // GET /contacts
 // router.get('/', ctrl.getAllContacts);
 
-// // GET /contacts/:id
+// // GET /contacts/:contactId
 // router.get(
-//   '/:id',
+//   '/:contactId',
 //   validateParams(paramsSchema),
 //   ctrl.getContactById
 // );
 
-// // POST /contacts  (JSON + optional photo)
+// // POST /contacts  (створення + опційне фото)
 // router.post(
 //   '/',
 //   upload.single('photo'),
@@ -236,24 +347,25 @@
 //   ctrl.createContact
 // );
 
-// // PATCH /contacts/:id  (оновлення полів і/або фото)
+// // PATCH /contacts/:contactId  (оновлення полів і/або фото)
 // router.patch(
-//   '/:id',
-//   upload.single('photo'),
+//   '/:contactId',
 //   validateParams(paramsSchema),
+//   upload.single('photo'),
 //   validateBody(contactPatchSchema),
 //   ctrl.updateContactById
 // );
 
-// // DELETE /contacts/:id
+// // DELETE /contacts/:contactId
 // router.delete(
-//   '/:id',
+//   '/:contactId',
 //   validateParams(paramsSchema),
 //   ctrl.deleteContactById
 // );
 
 // export default router;
 
+// src/routers/contacts.js
 
 import express from 'express';
 import authenticate from '../middlewares/authenticate.js';
@@ -267,8 +379,6 @@ import {
 import * as ctrl from '../controllers/contactsController.js';
 
 const router = express.Router();
-
-// всі маршрути тільки для залогінених
 router.use(authenticate);
 
 // GET /contacts
@@ -281,7 +391,7 @@ router.get(
   ctrl.getContactById
 );
 
-// POST /contacts  — створити з опцією фото
+// POST /contacts  (створення + опційне фото)
 router.post(
   '/',
   upload.single('photo'),
@@ -289,20 +399,12 @@ router.post(
   ctrl.createContact
 );
 
-// PATCH /contacts/:id — оновити поля і/або фото
+// PATCH /contacts/:id  (оновлення полів і/або фото)
 router.patch(
   '/:id',
-  upload.single('photo'),
   validateParams(paramsSchema),
+  upload.single('photo'),
   validateBody(contactPatchSchema),
-  ctrl.updateContactById
-);
-
-router.patch(
-  '/:id/photo',
-  authenticate,
-  validateParams(paramsSchema),
-  upload.single('photo'),
   ctrl.updateContactById
 );
 
@@ -312,5 +414,22 @@ router.delete(
   validateParams(paramsSchema),
   ctrl.deleteContactById
 );
+
+router.patch(
+  '/:id/photo',
+  validateParams(paramsSchema),
+  upload.single('photo'),
+  ctrl.updateContactById
+);
+
+// PATCH полів і/або фото (якщо хочете лишити його)
+router.patch(
+  '/:id',
+  validateParams(paramsSchema),
+  upload.single('photo'),
+  validateBody(contactPatchSchema),
+  ctrl.updateContactById
+);
+
 
 export default router;
