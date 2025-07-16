@@ -1,404 +1,12 @@
-// // // // // // import createError from 'http-errors';
-// // // // // // import * as service from '../services/contacts.js';
+// // src/controllers/contacts.js
 
-// // // // // // export const listContacts = async (req, res, next) => {
-// // // // // //   try {
-// // // // // //     const page  = Number(req.query.page)    || 1;
-// // // // // //     const limit = Number(req.query.limit)
-// // // // // //                     || Number(req.query.perPage)
-// // // // // //                     || 20;
-// // // // // //     const { sortBy, sortOrder } = req.query;
-
-// // // // // //     const { contacts, totalItems } = await service.listContacts(
-// // // // // //       req.user._id,
-// // // // // //       { page, limit, sortBy, sortOrder }
-// // // // // //     );
-
-// // // // // //     res.json({
-// // // // // //       status: 200,
-// // // // // //       message: 'Contacts retrieved successfully',
-// // // // // //       data: {
-// // // // // //         contacts,
-// // // // // //         page,
-// // // // // //         perPage: limit,
-// // // // // //         totalItems,
-// // // // // //         totalPages: Math.ceil(totalItems / limit),
-// // // // // //         hasPreviousPage: page > 1,
-// // // // // //         hasNextPage: page * limit < totalItems
-// // // // // //       }
-// // // // // //     });
-// // // // // //   } catch (err) {
-// // // // // //     next(err);
-// // // // // //   }
-// // // // // // };
-
-// // // // // // export const getContact = async (req, res, next) => {
-// // // // // //   try {
-// // // // // //     const contact = await service.getContactById(req.params.id, req.user._id);
-// // // // // //     if (!contact) throw createError(404, 'Contact not found');
-// // // // // //     res.json({ status: 200, message: 'Contact found', data: contact });
-// // // // // //   } catch (err) {
-// // // // // //     next(err);
-// // // // // //   }
-// // // // // // };
-
-// // // // // // export const createContact = async (req, res, next) => {
-// // // // // //   try {
-// // // // // //     const newC = await service.addContact(req.body, req.user._id);
-// // // // // //     res.status(201).json({ status: 201, message: 'Contact created', data: newC });
-// // // // // //   } catch (err) {
-// // // // // //     next(err);
-// // // // // //   }
-// // // // // // };
-
-// // // // // // export const updateContact = async (req, res, next) => {
-// // // // // //   try {
-// // // // // //     const updated = await service.updateContact(
-// // // // // //       req.params.id,
-// // // // // //       req.body,
-// // // // // //       req.user._id
-// // // // // //     );
-// // // // // //     if (!updated) throw createError(404, 'Contact not found');
-// // // // // //     res.json({ status: 200, message: 'Contact updated', data: updated });
-// // // // // //   } catch (err) {
-// // // // // //     next(err);
-// // // // // //   }
-// // // // // // };
-
-// // // // // // export const deleteContact = async (req, res, next) => {
-// // // // // //   try {
-// // // // // //     const deleted = await service.removeContact(req.params.id, req.user._id);
-// // // // // //     if (!deleted) throw createError(404, 'Contact not found');
-// // // // // //     res.json({ status: 200, message: 'Contact deleted', data: null });
-// // // // // //   } catch (err) {
-// // // // // //     next(err);
-// // // // // //   }
-// // // // // // };
-// // // // // import createError from 'http-errors';
-// // // // // import {
-// // // // //   fetchContacts,
-// // // // //   getById,
-// // // // //   addContact,
-// // // // //   updateContact,
-// // // // //   deleteContact
-// // // // // } from '../services/contacts.js';
-
-// // // // // export const getAllContacts = async (req, res, next) => {
-// // // // //   try {
-// // // // //     const { page = 1, perPage = 10, sortBy, sortOrder, isFavourite, contactType } = req.query;
-// // // // //     const result = await fetchContacts(req.user._id, {
-// // // // //       page, perPage, sortBy, sortOrder, isFavourite, contactType
-// // // // //     });
-// // // // //     res.json({ status: 200, message: 'Contacts retrieved', data: result });
-// // // // //   } catch (err) {
-// // // // //     next(err);
-// // // // //   }
-// // // // // };
-
-// // // // // export const getContactById = async (req, res, next) => {
-// // // // //   try {
-// // // // //     const contact = await getById(req.params.id, req.user._id);
-// // // // //     if (!contact) throw createError(404, 'Contact not found');
-// // // // //     res.json({ status: 200, message: 'Contact found', data: contact });
-// // // // //   } catch (err) {
-// // // // //     next(err);
-// // // // //   }
-// // // // // };
-
-// // // // // export const createContact = async (req, res, next) => {
-// // // // //   try {
-// // // // //     const newContact = await addContact({ ...req.body, userId: req.user._id });
-// // // // //     res.status(201).json({ status: 201, message: 'Contact created', data: newContact });
-// // // // //   } catch (err) {
-// // // // //     next(err);
-// // // // //   }
-// // // // // };
-
-// // // // // export const updateContactById = async (req, res, next) => {
-// // // // //   try {
-// // // // //     const updated = await updateContact(req.params.id, req.body, req.user._id);
-// // // // //     if (!updated) throw createError(404, 'Contact not found');
-// // // // //     res.json({ status: 200, message: 'Contact updated', data: updated });
-// // // // //   } catch (err) {
-// // // // //     next(err);
-// // // // //   }
-// // // // // };
-
-// // // // // export const deleteContactById = async (req, res, next) => {
-// // // // //   try {
-// // // // //     const deleted = await deleteContact(req.params.id, req.user._id);
-// // // // //     if (!deleted) throw createError(404, 'Contact not found');
-// // // // //     res.status(204).end();
-// // // // //   } catch (err) {
-// // // // //     next(err);
-// // // // //   }
-// // // // // };
-// // // // // src/controllers/contactsController.js
-
-// // // // import createError from 'http-errors';
-// // // // import { fetchContacts, getById, addContact, updateContact, deleteContact } from '../services/contacts.js';
-
-// // // // export const getAllContacts = async (req, res, next) => {
-// // // //   try {
-// // // //     const { page = 1, perPage = 10, sortBy, sortOrder, isFavourite, contactType } = req.query;
-// // // //     const { contacts, totalItems, page: pageNum, perPage: perPageNum } =
-// // // //       await fetchContacts(req.user._id, { page, perPage, sortBy, sortOrder, isFavourite, contactType });
-
-// // // //     res.status(200).json({
-// // // //       status: 200,
-// // // //       message: 'Contacts retrieved',
-// // // //       data: {
-// // // //         data: contacts,
-// // // //         page: pageNum,
-// // // //         perPage: perPageNum,
-// // // //         totalItems,
-// // // //         totalPages: Math.ceil(totalItems / perPageNum),
-// // // //         hasPreviousPage: pageNum > 1,
-// // // //         hasNextPage: pageNum < Math.ceil(totalItems / perPageNum)
-// // // //       }
-// // // //     });
-// // // //   } catch (err) {
-// // // //     next(err);
-// // // //   }
-// // // // };
-
-
-// // // import createError from 'http-errors';
-// // // import {
-// // //   fetchContacts,
-// // //   getById,
-// // //   addContact,
-// // //   updateContact,
-// // //   deleteContact
-// // // } from '../services/contacts.js';
-
-// // // export const getAllContacts = async (req, res, next) => {
-// // //   try {
-// // //     const {
-// // //       page = 1,
-// // //       perPage = 10,
-// // //       sortBy,
-// // //       sortOrder,
-// // //       isFavourite,
-// // //       contactType
-// // //     } = req.query;
-
-// // //     const {
-// // //       contacts,
-// // //       totalItems,
-// // //       page: pageNum,
-// // //       perPage: perPageNum
-// // //     } = await fetchContacts(req.user._id, {
-// // //       page,
-// // //       perPage,
-// // //       sortBy,
-// // //       sortOrder,
-// // //       isFavourite,
-// // //       contactType
-// // //     });
-
-// // //     res.status(200).json({
-// // //       status: 200,
-// // //       message: 'Contacts retrieved',
-// // //       data: {
-// // //         data: contacts,
-// // //         page: pageNum,
-// // //         perPage: perPageNum,
-// // //         totalItems,
-// // //         totalPages: Math.ceil(totalItems / perPageNum),
-// // //         hasPreviousPage: pageNum > 1,
-// // //         hasNextPage: pageNum < Math.ceil(totalItems / perPageNum)
-// // //       }
-// // //     });
-// // //   } catch (err) {
-// // //     next(err);
-// // //   }
-// // // };
-
-// // // export const getContactById = async (req, res, next) => {
-// // //   try {
-// // //     const contact = await getById(req.params.id, req.user._id);
-// // //     res.status(200).json({
-// // //       status: 200,
-// // //       message: 'Contact found',
-// // //       data: contact
-// // //     });
-// // //   } catch (err) {
-// // //     next(err);
-// // //   }
-// // // };
-
-// // // export const createContact = async (req, res, next) => {
-// // //   try {
-// // //     const newContact = await addContact({
-// // //       ...req.body,
-// // //       userId: req.user._id
-// // //     });
-// // //     res.status(201).json({
-// // //       status: 201,
-// // //       message: 'Contact created',
-// // //       data: newContact
-// // //     });
-// // //   } catch (err) {
-// // //     next(err);
-// // //   }
-// // // };
-
-// // // export const updateContactById = async (req, res, next) => {
-// // //   try {
-// // //     const updated = await updateContact(
-// // //       req.params.id,
-// // //       req.body,
-// // //       req.user._id
-// // //     );
-// // //     res.status(200).json({
-// // //       status: 200,
-// // //       message: 'Contact updated',
-// // //       data: updated
-// // //     });
-// // //   } catch (err) {
-// // //     next(err);
-// // //   }
-// // // };
-
-// // // export const deleteContactById = async (req, res, next) => {
-// // //   try {
-// // //     await deleteContact(req.params.id, req.user._id);
-// // //     res.status(204).json();
-// // //   } catch (err) {
-// // //     next(err);
-// // //   }
-// // // };
-
-// // import createError from 'http-errors';
-// // import {
-// //   fetchContacts,
-// //   getById,
-// //   addContact,
-// //   updateContact,
-// //   deleteContact
-// // } from '../services/contacts.js';
-// // import cloudinary from '../services/cloudinary.js';
-
-// // const folder = process.env.CLOUDINARY_FOLDER || 'contacts';
-
-// // export const getAllContacts = async (req, res, next) => {
-// //   try {
-// //     const {
-// //       page = 1,
-// //       perPage = 10,
-// //       sortBy,
-// //       sortOrder,
-// //       isFavourite,
-// //       contactType
-// //     } = req.query;
-
-// //     const {
-// //       contacts,
-// //       totalItems,
-// //       page: pageNum,
-// //       perPage: perPageNum
-// //     } = await fetchContacts(req.user._id, {
-// //       page, perPage, sortBy, sortOrder, isFavourite, contactType
-// //     });
-
-// //     res.status(200).json({
-// //       status: 200,
-// //       message: 'Contacts retrieved',
-// //       data: {
-// //         data: contacts,
-// //         page: pageNum,
-// //         perPage: perPageNum,
-// //         totalItems,
-// //         totalPages: Math.ceil(totalItems / perPageNum),
-// //         hasPreviousPage: pageNum > 1,
-// //         hasNextPage: pageNum < Math.ceil(totalItems / perPageNum)
-// //       }
-// //     });
-// //   } catch (err) {
-// //     next(err);
-// //   }
-// // };
-
-// // export const getContactById = async (req, res, next) => {
-// //   try {
-// //     const contact = await getById(req.params.id, req.user._id);
-// //     if (!contact) throw createError(404, 'Contact not found');
-// //     res.status(200).json({
-// //       status: 200,
-// //       message: 'Contact found',
-// //       data: contact
-// //     });
-// //   } catch (err) {
-// //     next(err);
-// //   }
-// // };
-
-// // export const createContact = async (req, res, next) => {
-// //   try {
-// //     const data = { 
-// //       ...req.body, 
-// //       userId: req.user._id 
-// //     };
-
-// //     if (req.file) {
-// //       const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-// //       const result = await cloudinary.uploader.upload(fileStr, { folder });
-// //       data.photo = result.secure_url;
-// //     }
-
-// //     const newContact = await addContact(data);
-// //     res.status(201).json({
-// //       status: 201,
-// //       message: 'Contact created',
-// //       data: newContact
-// //     });
-// //   } catch (err) {
-// //     next(err);
-// //   }
-// // };
-
-// // export const updateContactById = async (req, res, next) => {
-// //   try {
-// //     const data = { ...req.body };
-
-// //     if (req.file) {
-// //       const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-// //       const result = await cloudinary.uploader.upload(fileStr, { folder });
-// //       data.photo = result.secure_url;
-// //     }
-
-// //     const updated = await updateContact(
-// //       req.params.id,
-// //       { ...data, userId: req.user._id }
-// //     );
-// //     if (!updated) throw createError(404, 'Contact not found');
-    
-// //     res.status(200).json({
-// //       status: 200,
-// //       message: 'Contact updated',
-// //       data: updated
-// //     });
-// //   } catch (err) {
-// //     next(err);
-// //   }
-// // };
-
-// // export const deleteContactById = async (req, res, next) => {
-// //   try {
-// //     await deleteContact(req.params.id, req.user._id);
-// //     res.status(204).send();
-// //   } catch (err) {
-// //     next(err);
-// //   }
-// // };
 // import createError from 'http-errors';
 // import {
 //   fetchContacts,
 //   getById,
-//   addContact,
-//   updateContact,
-//   deleteContact
+//   addContact as servicesAddContact,
+//   updateContact as servicesUpdateContact,
+//   deleteContact as servicesDeleteContact
 // } from '../services/contacts.js';
 // import cloudinary from '../services/cloudinary.js';
 
@@ -406,7 +14,14 @@
 
 // export const getAllContacts = async (req, res, next) => {
 //   try {
-//     const { page = 1, perPage = 10, sortBy, sortOrder, isFavourite, contactType } = req.query;
+//     const {
+//       page = 1,
+//       perPage = 10,
+//       sortBy,
+//       sortOrder,
+//       isFavourite,
+//       contactType
+//     } = req.query;
 
 //     const {
 //       contacts,
@@ -414,7 +29,12 @@
 //       page: pageNum,
 //       perPage: perPageNum
 //     } = await fetchContacts(req.user._id, {
-//       page, perPage, sortBy, sortOrder, isFavourite, contactType
+//       page,
+//       perPage,
+//       sortBy,
+//       sortOrder,
+//       isFavourite,
+//       contactType
 //     });
 
 //     res.status(200).json({
@@ -438,7 +58,9 @@
 // export const getContactById = async (req, res, next) => {
 //   try {
 //     const contact = await getById(req.params.id, req.user._id);
-//     if (!contact) throw createError(404, 'Contact not found');
+//     if (!contact) {
+//       throw createError(404, 'Contact not found');
+//     }
 //     res.status(200).json({
 //       status: 200,
 //       message: 'Contact found',
@@ -449,21 +71,24 @@
 //   }
 // };
 
-// export const createContact = async (req, res, next) => {
+// export const addContact = async (req, res, next) => {
 //   try {
 //     const data = { ...req.body, userId: req.user._id };
 
 //     if (req.file) {
-//       const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-//       const result  = await cloudinary.uploader.upload(fileStr, { folder });
-//       data.photo     = result.secure_url;
+//       // прев’ю файл у base64 і завантажуємо в Cloudinary
+//       const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString(
+//         'base64'
+//       )}`;
+//       const result = await cloudinary.uploader.upload(fileStr, { folder });
+//       data.avatar = result.secure_url;
 //     }
 
-//     const newContact = await addContact(data);
+//     const newContact = await servicesAddContact(data);
 //     res.status(201).json({
 //       status: 201,
 //       message: 'Contact created',
-//       data:    newContact
+//       data: newContact
 //     });
 //   } catch (err) {
 //     next(err);
@@ -472,25 +97,28 @@
 
 // export const updateContactById = async (req, res, next) => {
 //   try {
-//     const data = { ...req.body };
+//     const update = { ...req.body };
 
 //     if (req.file) {
-//       const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-//       const result  = await cloudinary.uploader.upload(fileStr, { folder });
-//       data.photo     = result.secure_url;
+//       const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString(
+//         'base64'
+//       )}`;
+//       const result = await cloudinary.uploader.upload(fileStr, { folder });
+//       update.avatar = result.secure_url;
 //     }
 
-//     const updated = await updateContact(req.params.id, {
-//       ...data,
+//     const updated = await servicesUpdateContact(req.params.id, {
+//       ...update,
 //       userId: req.user._id
 //     });
-
-//     if (!updated) throw createError(404, 'Contact not found');
+//     if (!updated) {
+//       throw createError(404, 'Contact not found');
+//     }
 
 //     res.status(200).json({
 //       status: 200,
 //       message: 'Contact updated',
-//       data:    updated
+//       data: updated
 //     });
 //   } catch (err) {
 //     next(err);
@@ -499,30 +127,60 @@
 
 // export const deleteContactById = async (req, res, next) => {
 //   try {
-//     const deleted = await deleteContact(req.params.id, req.user._id);
-//     if (!deleted) throw createError(404, 'Contact not found');
-//     res.status(200).json({ status: 200, message: 'Contact deleted' });
+//     const deleted = await servicesDeleteContact(req.params.id, req.user._id);
+//     if (!deleted) {
+//       throw createError(404, 'Contact not found');
+//     }
+//     res.status(200).json({
+//       status: 200,
+//       message: 'Contact deleted'
+//     });
 //   } catch (err) {
 //     next(err);
 //   }
 // };
+
+// src/controllers/contactsController.js
+
 import createError from 'http-errors';
+import path from 'path';
+import fs from 'fs/promises';
 import {
   fetchContacts,
   getById,
-  addContact,
-  updateContact,
-  deleteContact
+  addContact as servicesAddContact,
+  updateContact as servicesUpdateContact,
+  deleteContact as servicesDeleteContact
 } from '../services/contacts.js';
 import cloudinary from '../services/cloudinary.js';
 
+const tmpDir = path.join(process.cwd(), 'tmp');
 const folder = process.env.CLOUDINARY_FOLDER || 'contacts';
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const { page = 1, perPage = 10, sortBy, sortOrder, isFavourite, contactType } = req.query;
-    const { contacts, totalItems, page: pageNum, perPage: perPageNum } =
-      await fetchContacts(req.user._id, { page, perPage, sortBy, sortOrder, isFavourite, contactType });
+    const {
+      page = 1,
+      perPage = 10,
+      sortBy,
+      sortOrder,
+      isFavourite,
+      contactType
+    } = req.query;
+
+    const {
+      contacts,
+      totalItems,
+      page: pageNum,
+      perPage: perPageNum
+    } = await fetchContacts(req.user._id, {
+      page,
+      perPage,
+      sortBy,
+      sortOrder,
+      isFavourite,
+      contactType
+    });
 
     res.status(200).json({
       status: 200,
@@ -546,24 +204,37 @@ export const getContactById = async (req, res, next) => {
   try {
     const contact = await getById(req.params.id, req.user._id);
     if (!contact) throw createError(404, 'Contact not found');
-    res.status(200).json({ status: 200, message: 'Contact found', data: contact });
+    res.status(200).json({
+      status: 200,
+      message: 'Contact found',
+      data: contact
+    });
   } catch (err) {
     next(err);
   }
 };
 
-export const createContact = async (req, res, next) => {
+export const addContact = async (req, res, next) => {
   try {
     const data = { ...req.body, userId: req.user._id };
 
     if (req.file) {
-      const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-      const result = await cloudinary.uploader.upload(fileStr, { folder });
-      data.photo = result.secure_url;
+      const filePath = path.join(tmpDir, req.file.filename);
+
+      // Завантажуємо файл за шляхом
+      const result = await cloudinary.uploader.upload(filePath, { folder });
+      data.photo = result.secure_url; 
+
+      // Видаляємо тимчасовий файл
+      await fs.unlink(filePath);
     }
 
-    const newContact = await addContact(data);
-    res.status(201).json({ status: 201, message: 'Contact created', data: newContact });
+    const newContact = await servicesAddContact(data);
+    res.status(201).json({
+      status: 201,
+      message: 'Contact created',
+      data: newContact
+    });
   } catch (err) {
     next(err);
   }
@@ -571,18 +242,27 @@ export const createContact = async (req, res, next) => {
 
 export const updateContactById = async (req, res, next) => {
   try {
-    const data = { ...req.body };
+    const update = { ...req.body };
 
     if (req.file) {
-      const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-      const result = await cloudinary.uploader.upload(fileStr, { folder });
-      data.photo = result.secure_url;
+      const filePath = path.join(tmpDir, req.file.filename);
+
+      const result = await cloudinary.uploader.upload(filePath, { folder });
+      update.avatar = result.secure_url;
+      await fs.unlink(filePath);
     }
 
-    const updated = await updateContact(req.params.id, { ...data, userId: req.user._id });
+    const updated = await servicesUpdateContact(req.params.id, {
+      ...update,
+      userId: req.user._id
+    });
     if (!updated) throw createError(404, 'Contact not found');
 
-    res.status(200).json({ status: 200, message: 'Contact updated', data: updated });
+    res.status(200).json({
+      status: 200,
+      message: 'Contact updated',
+      data: updated
+    });
   } catch (err) {
     next(err);
   }
@@ -590,9 +270,12 @@ export const updateContactById = async (req, res, next) => {
 
 export const deleteContactById = async (req, res, next) => {
   try {
-    const deleted = await deleteContact(req.params.id, req.user._id);
+    const deleted = await servicesDeleteContact(req.params.id, req.user._id);
     if (!deleted) throw createError(404, 'Contact not found');
-    res.status(200).json({ status: 200, message: 'Contact deleted' });
+    res.status(200).json({
+      status: 200,
+      message: 'Contact deleted'
+    });
   } catch (err) {
     next(err);
   }
