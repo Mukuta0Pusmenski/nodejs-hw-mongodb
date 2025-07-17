@@ -1,27 +1,73 @@
-// src/services/sendMail.js
-import nodemailer from "nodemailer";
+// import nodemailer from 'nodemailer';
 
-const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD } = process.env;
+// const {
+//   SMTP_HOST,
+//   SMTP_PORT,
+//   SMTP_USER,
+//   SMTP_PASSWORD
+// } = process.env;
+
+// // кастинг порту і визначення TLS лише для 465
+// const port = Number(SMTP_PORT);
+// const secure = port === 465;
+
+// const transporter = nodemailer.createTransport({
+//   host: SMTP_HOST,
+//   port,
+//   secure,
+//   auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
+//   tls: {
+//     rejectUnauthorized: false
+//   }
+// });
+
+// // Додатковий лог для перевірки підключення
+// transporter.verify()
+//   .then(() => console.log('SMTP connected ✅', { host: SMTP_HOST, port, secure }))
+//   .catch(err => console.error('SMTP connection failed ❌', err));
+
+// export default async function sendMail({ to, subject, html }) {
+//   const info = await transporter.sendMail({
+//     from: SMTP_USER,
+//     to,
+//     subject,
+//     html
+//   });
+//   console.log('[sendMail] Message sent:', info.messageId);
+//   return info;
+// }
+
+import nodemailer from 'nodemailer';
+
+const {
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASSWORD
+} = process.env;
+
+const port   = Number(SMTP_PORT);
+const secure = port === 465;
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
-  port: Number(SMTP_PORT),
-  secure: true,
-  auth: {
-    user: SMTP_USER,
-    pass: SMTP_PASSWORD,
-  },
+  port,
+  secure,
+  auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
+  tls: { rejectUnauthorized: false }
 });
 
-const sendEmail = async ({ to, subject, html }) => {
-  const emailOptions = {
-    from: SMTP_USER,
+transporter.verify()
+  .then(() => console.log('SMTP connected ✅', { host: SMTP_HOST, port, secure }))
+  .catch(err => console.error('SMTP connection failed ❌', err));
+
+export default async function sendMail({ to, subject, html }) {
+  const info = await transporter.sendMail({
+    from:    SMTP_USER,
     to,
     subject,
-    html,
-  };
-
-  await transporter.sendMail(emailOptions);
-};
-
-export default sendEmail;
+    html
+  });
+  console.log('[sendMail] Message sent:', info.messageId);
+  return info;
+}
