@@ -1,3 +1,42 @@
+// // import nodemailer from 'nodemailer';
+
+// // const {
+// //   SMTP_HOST,
+// //   SMTP_PORT,
+// //   SMTP_USER,
+// //   SMTP_PASSWORD
+// // } = process.env;
+
+// // // кастинг порту і визначення TLS лише для 465
+// // const port = Number(SMTP_PORT);
+// // const secure = port === 465;
+
+// // const transporter = nodemailer.createTransport({
+// //   host: SMTP_HOST,
+// //   port,
+// //   secure,
+// //   auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
+// //   tls: {
+// //     rejectUnauthorized: false
+// //   }
+// // });
+
+// // // Додатковий лог для перевірки підключення
+// // transporter.verify()
+// //   .then(() => console.log('SMTP connected ✅', { host: SMTP_HOST, port, secure }))
+// //   .catch(err => console.error('SMTP connection failed ❌', err));
+
+// // export default async function sendMail({ to, subject, html }) {
+// //   const info = await transporter.sendMail({
+// //     from: SMTP_USER,
+// //     to,
+// //     subject,
+// //     html
+// //   });
+// //   console.log('[sendMail] Message sent:', info.messageId);
+// //   return info;
+// // }
+
 // import nodemailer from 'nodemailer';
 
 // const {
@@ -7,8 +46,7 @@
 //   SMTP_PASSWORD
 // } = process.env;
 
-// // кастинг порту і визначення TLS лише для 465
-// const port = Number(SMTP_PORT);
+// const port   = Number(SMTP_PORT);
 // const secure = port === 465;
 
 // const transporter = nodemailer.createTransport({
@@ -16,19 +54,16 @@
 //   port,
 //   secure,
 //   auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
-//   tls: {
-//     rejectUnauthorized: false
-//   }
+//   tls: { rejectUnauthorized: false }
 // });
 
-// // Додатковий лог для перевірки підключення
 // transporter.verify()
 //   .then(() => console.log('SMTP connected ✅', { host: SMTP_HOST, port, secure }))
 //   .catch(err => console.error('SMTP connection failed ❌', err));
 
 // export default async function sendMail({ to, subject, html }) {
 //   const info = await transporter.sendMail({
-//     from: SMTP_USER,
+//     from:    SMTP_USER,
 //     to,
 //     subject,
 //     html
@@ -40,34 +75,32 @@
 import nodemailer from 'nodemailer';
 
 const {
-  SMTP_HOST,
-  SMTP_PORT,
   SMTP_USER,
-  SMTP_PASSWORD
+  SMTP_PASSWORD,
+  SMTP_FROM,
 } = process.env;
 
-const port   = Number(SMTP_PORT);
-const secure = port === 465;
-
 const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port,
-  secure,
-  auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
-  tls: { rejectUnauthorized: false }
+  service: 'gmail',
+  auth: {
+    user: SMTP_USER,
+    pass: SMTP_PASSWORD,
+  },
 });
 
+// Перевірка підключення до SMTP
 transporter.verify()
-  .then(() => console.log('SMTP connected ✅', { host: SMTP_HOST, port, secure }))
-  .catch(err => console.error('SMTP connection failed ❌', err));
+  .then(() => console.log('✅ Gmail SMTP connected'))
+  .catch(err => console.error('❌ SMTP connection failed:', err));
 
 export default async function sendMail({ to, subject, html }) {
   const info = await transporter.sendMail({
-    from:    SMTP_USER,
+    from: SMTP_FROM || SMTP_USER,  // якщо немає FROM — використовуємо SMTP_USER
     to,
     subject,
-    html
+    html,
   });
-  console.log('[sendMail] Message sent:', info.messageId);
+
+  console.log('[sendMail] ✅ Message sent:', info.messageId);
   return info;
 }
