@@ -570,13 +570,49 @@
 //     next(err);
 //   }
 // };
-
+// src/controllers/auth.controller.js
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
 
 import User from '../models/user.js';
 import Session from '../models/session.js';
-import sendMail from '../services/email.js';
+import sendMail from '../services/sendMail.js';  // зверни увагу на шлях
+
+export const sendResetEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw createError(404, 'User not found');
+    }
+
+    // генеруємо короткоживущий токен
+    const token = jwt.sign({ email }, process.env.JWT_SECRET_RESET, { expiresIn: '5m' });
+
+    const domain = process.env.APP_DOMAIN || `${req.protocol}://${req.get('host')}`;
+    const resetLink = `${domain}/reset-password?token=${token}`;
+
+    // надсилаємо листа
+    await sendMail({
+      to: email,
+      subject: 'Password Reset',
+      html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: 'Reset password email has been successfully sent.',
+      data: {},
+    });
+  } catch (err) {
+    // якщо помилка SMTP — кинемо 500
+    if (err.response && err.response.code === 'EAUTH') {
+      return next(createError(500, 'Failed to send the email, please try again later.'));
+    }
+    next(err);
+  }
+};
+
 
 export const login = async (req, res, next) => {
   try {
@@ -646,28 +682,28 @@ export const logout = async (req, res, next) => {
   }
 };
 
-export const sendResetEmail = async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) throw createError(404, 'User not found');
+// export const sendResetEmail = async (req, res, next) => {
+//   try {
+//     const { email } = req.body;
+//     const user = await User.findOne({ email });
+//     if (!user) throw createError(404, 'User not found');
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET_RESET, { expiresIn: '5m' });
+//     const token = jwt.sign({ email }, process.env.JWT_SECRET_RESET, { expiresIn: '5m' });
 
-    const domain = process.env.APP_DOMAIN || `${req.protocol}://${req.get('host')}`;
-    const resetLink = `${domain}/auth/reset-password/${token}`;
+//     const domain = process.env.APP_DOMAIN || `${req.protocol}://${req.get('host')}`;
+//     const resetLink = `${domain}/auth/reset-password/${token}`;
 
-    await sendMail({
-      to: email,
-      subject: 'Password reset',
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
-    });
+//     await sendMail({
+//       to: email,
+//       subject: 'Password reset',
+//       html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+//     });
 
-    res.status(200).json({ status: 200, message: 'Password reset email sent' });
-  } catch (err) {
-    next(err);
-  }
-};
+//     res.status(200).json({ status: 200, message: 'Password reset email sent' });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const resetPassword = async (req, res, next) => {
   try {
