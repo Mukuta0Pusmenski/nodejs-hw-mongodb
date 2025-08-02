@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build-docs": "redocly bundle docs/openapi.yaml --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview docs/openapi.yaml"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -22,9 +24,12 @@
     "mailgun.js": "^12.0.3",
     "mongoose": "^8.16.3",
     "multer": "^2.0.1",
-    "nodemailer": "^7.0.5"
+    "nodemailer": "^7.0.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
+    "@redocly/cli": "^2.0.2",
     "nodemon": "^3.1.9"
   }
 }

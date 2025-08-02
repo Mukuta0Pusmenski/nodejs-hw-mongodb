@@ -24,4 +24,10 @@ export default function setupServer() {
 
   const PORT = Number(process.env.PORT) || 3000;
   app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+  const swaggerUi = require('swagger-ui-express');
+  const swaggerSpec = require('./swagger');
+
 }
