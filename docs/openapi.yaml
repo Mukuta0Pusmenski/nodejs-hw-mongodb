@@ -1,47 +1,371 @@
-# openapi: 3.1.0
-# info:
-#   version: 1.0.0
-#   title: Contact Book API
-#   license:
-#     name: Apache 2.0
-#     url: http://www.apache.org/licenses/LICENSE-2.0.html
-#   description: >
-#     Це API для управління контактами. Ви можете створювати, редагувати, видаляти та переглядати свої контакти.
-# tags:
-#   - name: Contacts
-#     description: Операції з контактами
-# servers:
-#   - url: http://localhost:3000
-#   - url: https://nodejs-hw-mongodb-5-8zat.onrender.com
-# paths: {}
-# components:
-#   securitySchemes:
-#     bearerAuth:
-#       type: http
-#       scheme: bearer
-
 openapi: 3.1.0
 info:
   version: 1.0.0
   title: Contacts API
-  description: |
-    API для керування контактами, автентифікації та скидання пароля
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-tags:
-  - name: Auth
-    description: Операції з аутентифікації
-  - name: Contacts
-    description: Операції з контактами
+  description: API для керування контактами, автентифікації та скидання пароля
 servers:
   - url: http://localhost:3000
   - url: https://nodejs-hw-mongodb-5-8zat.onrender.com
-paths: {}
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Credentials:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    AuthTokens:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+
+    ResetRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+
+    ResetPassword:
+      type: object
+      required:
+        - token
+        - newPassword
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
+
+    Contact:
+      type: object
+      required:
+        - name
+        - email
+        - phoneNumber
+        - contactType
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        contactType:
+          type: string
+          enum: [work, home, personal]
+        isFavourite:
+          type: boolean
+          default: false
+        photo:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
 security:
   - bearerAuth: []
+
+tags:
+  - name: Auth
+    description: Операції з аутентифікації
+  - name: Contacts
+    description: Операції з контактами
+
+paths:
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Реєстрація нового користувача
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '201':
+          description: Користувача створено успішно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: User registered successfully
+        '400':
+          description: Помилка валідації або користувач вже існує
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Email already in use
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Логін користувача
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Успішний логін
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/AuthTokens'
+        '401':
+          description: Невірні облікові дані
+
+  /auth/send-reset-email:
+    post:
+      tags: [Auth]
+      summary: Надіслати лист для скидання пароля
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetRequest'
+      responses:
+        '200':
+          description: Лист для скидання пароля відправлено
+        '404':
+          description: Користувач не знайдений
+
+  /auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: Скинути пароль за токеном
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+      responses:
+        '200':
+          description: Пароль успішно змінено
+        '401':
+          description: Токен прострочено або недійсний
+
+  /contacts:
+    get:
+      tags: [Contacts]
+      summary: Отримати список контактів
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: perPage
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Список контактів
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Contact'
+                      page:
+                        type: integer
+                      perPage:
+                        type: integer
+                      totalItems:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      hasPreviousPage:
+                        type: boolean
+                      hasNextPage:
+                        type: boolean
+        '401':
+          description: Неавторизований
+
+    post:
+      tags: [Contacts]
+      summary: Створити новий контакт
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phoneNumber:
+                  type: string
+                contactType:
+                  type: string
+                  enum: [work, home, personal]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Контакт створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        '400':
+          description: Помилка валідації
+
+  /contacts/{id}:
+    get:
+      tags: [Contacts]
+      summary: Отримати контакт за ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Контакт знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '404':
+          description: Контакт не знайдено
+
+    patch:
+      tags: [Contacts]
+      summary: Оновити контакт
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phoneNumber:
+                  type: string
+                contactType:
+                  type: string
+                  enum: [work, home, personal]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Контакт оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '404':
+          description: Контакт не знайдено
+
+    delete:
+      tags: [Contacts]
+      summary: Видалити контакт
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Контакт видалено
+        '404':
+          description: Контакт не знайдено
