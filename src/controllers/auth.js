@@ -729,34 +729,97 @@
 //   }
 // };
 
+// import jwt from 'jsonwebtoken';
+// import createError from 'http-errors';
+
+// import User from '../models/user.js';
+// import Session from '../models/session.js';
+// import sendMail from '../services/sendMail.js';
+
+// export const login = async (req, res, next) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+//     if (!user || !(await user.isValidPassword(password))) {
+//       throw createError(401, 'Email or password is wrong');
+//     }
+//     const accessToken  = jwt.sign({ id: user._id }, process.env.ACCESS_SECRET,  { expiresIn: '15m' });
+//     const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_SECRET, { expiresIn: '30d' });
+//     await Session.create({
+//       userId: user._id,
+//       accessToken, refreshToken,
+//       accessTokenValidUntil:  new Date(Date.now() + 15*60*1000),
+//       refreshTokenValidUntil: new Date(Date.now() + 30*24*60*60*1000),
+//     });
+//     res
+//       .cookie('accessToken',  accessToken,  { httpOnly: true, maxAge: 15*60*1000 })
+//       .cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 30*24*60*60*1000 })
+//       .status(200)
+//       .json({ status: 200, message: 'Successfully logged in', data: { accessToken } });
+//   } catch (err) { next(err); }
+// };
+
 import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
+import bcrypt from 'bcryptjs';
 
 import User from '../models/user.js';
 import Session from '../models/session.js';
 import sendMail from '../services/sendMail.js';
 
+// Реєстрація
+export const registerUser = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    const existing = await User.findOne({ email });
+    if (existing) {
+      throw createError(400, 'Email already in use');
+    }
+    const hash = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ name, email, password: hash });
+    res.status(201).json({
+      status: 201,
+      message: 'User registered successfully',
+      data: { id: newUser._id }
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Логін
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user || !(await user.isValidPassword(password))) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw createError(401, 'Email or password is wrong');
     }
-    const accessToken  = jwt.sign({ id: user._id }, process.env.ACCESS_SECRET,  { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_SECRET, { expiresIn: '30d' });
+    const accessToken = jwt.sign(
+      { id: user._id },
+      process.env.ACCESS_SECRET,
+      { expiresIn: '15m' }
+    );
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_SECRET,
+      { expiresIn: '30d' }
+    );
     await Session.create({
       userId: user._id,
-      accessToken, refreshToken,
-      accessTokenValidUntil:  new Date(Date.now() + 15*60*1000),
-      refreshTokenValidUntil: new Date(Date.now() + 30*24*60*60*1000),
+      accessToken,
+      refreshToken,
+      accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000),
+      refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     });
     res
-      .cookie('accessToken',  accessToken,  { httpOnly: true, maxAge: 15*60*1000 })
-      .cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 30*24*60*60*1000 })
+      .cookie('accessToken', accessToken, { httpOnly: true, maxAge: 15 * 60 * 1000 })
+      .cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
       .status(200)
       .json({ status: 200, message: 'Successfully logged in', data: { accessToken } });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const refresh = async (req, res, next) => {
