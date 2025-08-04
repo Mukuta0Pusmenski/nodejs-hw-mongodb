@@ -564,10 +564,13 @@ export const deleteContactById = async (req, res, next) => {
     const deleted = await deleteService(req.params.id, req.user._id);
     if (!deleted) throw createError(404, 'Contact not found');
 
-    res.status(200).json({
-      status: 200,
-      message: 'Contact deleted'
-    });
+    // res.status(200).json({
+    //   status: 200,
+    //   message: 'Contact deleted'
+    // });
+
+    res.status(204).send();
+
   } catch (err) {
     next(err);
   }

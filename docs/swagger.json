@@ -1,16 +1,18 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "version": "1.0.0",
     "title": "Contacts API",
+    "version": "1.0.0",
     "description": "API для керування контактами, автентифікації та скидання пароля"
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://nodejs-hw-mongodb-6.onrender.com",
+      "description": "Deployed server"
     },
     {
-      "url": "https://nodejs-hw-mongodb-5-8zat.onrender.com"
+      "url": "http://localhost:3000",
+      "description": "Local server"
     }
   ],
   "security": [
@@ -60,6 +62,14 @@
                     "message": {
                       "type": "string",
                       "example": "User registered successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
@@ -114,10 +124,12 @@
                   "type": "object",
                   "properties": {
                     "status": {
-                      "type": "integer"
+                      "type": "integer",
+                      "example": 200
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Successfully logged in"
                     },
                     "data": {
                       "$ref": "#/components/schemas/AuthTokens"
@@ -151,10 +163,47 @@
         },
         "responses": {
           "200": {
-            "description": "Лист для скидання пароля відправлено"
+            "description": "Лист для скидання пароля відправлено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reset password email has been successfully sent."
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Користувач не знайдений"
+            "description": "Користувач не знайдений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -177,10 +226,102 @@
         },
         "responses": {
           "200": {
-            "description": "Пароль успішно змінено"
+            "description": "Пароль успішно змінено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password has been reset successfully."
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Токен прострочено або недійсний"
+          },
+          "404": {
+            "description": "Користувач не знайдений",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Оновити JWT токени",
+        "responses": {
+          "200": {
+            "description": "Токени оновлено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Session refreshed"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AuthTokens"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нема refreshToken або сесія не знайдена"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Вихід із системи",
+        "responses": {
+          "204": {
+            "description": "Сесія завершена (No Content)"
+          },
+          "401": {
+            "description": "Нема refreshToken"
           }
         }
       }
@@ -203,7 +344,8 @@
             "schema": {
               "type": "integer",
               "default": 1
-            }
+            },
+            "description": "Номер сторінки"
           },
           {
             "in": "query",
@@ -211,22 +353,46 @@
             "schema": {
               "type": "integer",
               "default": 10
-            }
+            },
+            "description": "Кількість контактів на сторінці"
+          },
+          {
+            "in": "query",
+            "name": "isFavourite",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Фільтр “Улюблені”"
+          },
+          {
+            "in": "query",
+            "name": "contactType",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "work",
+                "home",
+                "personal"
+              ]
+            },
+            "description": "Фільтр за типом контакту"
           }
         ],
         "responses": {
           "200": {
-            "description": "Список контактів",
+            "description": "Список контактів із пагінацією",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "status": {
-                      "type": "integer"
+                      "type": "integer",
+                      "example": 200
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Contacts retrieved"
                     },
                     "data": {
                       "type": "object",
@@ -238,22 +404,28 @@
                           }
                         },
                         "page": {
-                          "type": "integer"
+                          "type": "integer",
+                          "example": 1
                         },
                         "perPage": {
-                          "type": "integer"
+                          "type": "integer",
+                          "example": 10
                         },
                         "totalItems": {
-                          "type": "integer"
+                          "type": "integer",
+                          "example": 7
                         },
                         "totalPages": {
-                          "type": "integer"
+                          "type": "integer",
+                          "example": 1
                         },
                         "hasPreviousPage": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "example": false
                         },
                         "hasNextPage": {
-                          "type": "boolean"
+                          "type": "boolean",
+                          "example": false
                         }
                       }
                     }
@@ -283,16 +455,25 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "phoneNumber",
+                  "contactType"
+                ],
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Ім’я контакту **(обов’язково)**"
                   },
                   "email": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "description": "Email контакту **(обов’язково)**"
                   },
                   "phoneNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Номер телефону **(обов’язково)**"
                   },
                   "contactType": {
                     "type": "string",
@@ -300,11 +481,17 @@
                       "work",
                       "home",
                       "personal"
-                    ]
+                    ],
+                    "description": "Тип контакту **(обов’язково)**"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "description": "Відмітка “Улюблені” (опціонально)"
                   },
                   "photo": {
                     "type": "string",
-                    "format": "binary"
+                    "format": "binary",
+                    "description": "Фото контакту (опціонально)"
                   }
                 }
               }
@@ -320,10 +507,12 @@
                   "type": "object",
                   "properties": {
                     "status": {
-                      "type": "integer"
+                      "type": "integer",
+                      "example": 201
                     },
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Contact created"
                     },
                     "data": {
                       "$ref": "#/components/schemas/Contact"
@@ -334,7 +523,24 @@
             }
           },
           "400": {
-            "description": "Помилка валідації"
+            "description": "Помилка валідації",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "\"phoneNumber\" is required"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -357,7 +563,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Ідентифікатор контакту"
           }
         ],
         "responses": {
@@ -366,13 +573,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Contact"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Contact found"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Contact"
+                    }
+                  }
                 }
               }
             }
           },
           "404": {
-            "description": "Контакт не знайдено"
+            "description": "Контакт не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -393,7 +630,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Ідентифікатор контакту"
           }
         ],
         "requestBody": {
@@ -421,6 +659,9 @@
                       "personal"
                     ]
                   },
+                  "isFavourite": {
+                    "type": "boolean"
+                  },
                   "photo": {
                     "type": "string",
                     "format": "binary"
@@ -436,13 +677,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Contact"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Contact updated"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Contact"
+                    }
+                  }
                 }
               }
             }
           },
           "404": {
-            "description": "Контакт не знайдено"
+            "description": "Контакт не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -463,15 +734,33 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Ідентифікатор контакту"
           }
         ],
         "responses": {
-          "200": {
-            "description": "Контакт видалено"
+          "204": {
+            "description": "Контакт видалено (No Content)"
           },
           "404": {
-            "description": "Контакт не знайдено"
+            "description": "Контакт не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -577,7 +866,8 @@
           },
           "photo": {
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "nullable": true
           },
           "createdAt": {
             "type": "string",
