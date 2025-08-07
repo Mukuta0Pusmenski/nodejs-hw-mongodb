@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000/api',
+        url: 'https://nodejs-hw-mongodb-6-kq3a.onrender.com/api',
       },
     ],
     components: {

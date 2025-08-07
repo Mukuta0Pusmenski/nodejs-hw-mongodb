@@ -11,8 +11,8 @@
           "description": "Deployed server"
         },
         {
-          "url": "http://localhost:3000",
-          "description": "Local server"
+          "url": "https://nodejs-hw-mongodb-6-kq3a.onrender.com/api",
+          "description": "Production server"
         }
       ],
       "security": [
