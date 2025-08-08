@@ -1031,10 +1031,10 @@ info:
   description: API для керування контактами, автентифікації та скидання пароля
 
 servers:
-  - url: https://nodejs-hw-mongodb-6.onrender.com
-    description: Deployed server
   - url: http://localhost:3000
     description: Local server
+  - url: https://nodejs-hw-mongodb-6-kq3a.onrender.com
+    description: Production server
 
 components:
   securitySchemes:
